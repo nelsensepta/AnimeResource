@@ -7,7 +7,6 @@ import SongList from "../components/songs/SongList";
 import Spinner from "../components/ui/Spinner";
 import stylesHome from "./Home.module.css";
 import { BiSearch } from "react-icons/bi";
-import Layout from "../components/layout/Layout";
 
 const Songs = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -38,28 +37,27 @@ const Songs = () => {
   ];
 
   return (
-    <Layout>
-      <section className={styles.popular}>
-        {/* <h1 className="title">
+    <section className={styles.popular}>
+      {/* <h1 className="title">
         Top 10 Free{" "}
         <span className={styles.lead}>
           {selectedCategory ? selectedCategory : "To Play"}
         </span>{" "}
         Games for PC and Browser in {currentMonth} {currentYear}
       </h1> */}
-        <form className={stylesHome.form}>
-          <label>
-            <BiSearch className={stylesHome.search_icon} />
-            <input
-              onChange={(e) => setSearchTerm(e.target.value)}
-              type="search"
-              placeholder="Search for title or artist"
-              className={stylesHome.input}
-            />
-          </label>
-        </form>
+      <form className={stylesHome.form}>
+        <label>
+          <BiSearch className={stylesHome.search_icon} />
+          <input
+            onChange={(e) => setSearchTerm(e.target.value)}
+            type="search"
+            placeholder="Search for title or artist"
+            className={stylesHome.input}
+          />
+        </label>
+      </form>
 
-        {/* <div className={styles.filter}>
+      {/* <div className={styles.filter}>
         <label htmlFor="category">More Top 10's:</label>
         <select
           defaultValue="Select Category"
@@ -75,11 +73,10 @@ const Songs = () => {
         </select>
       </div> */}
 
-        {isPending && <Spinner />}
-        {error && <p>{error}</p>}
-        {data && <SongList items={data} />}
-      </section>
-    </Layout>
+      {isPending && <Spinner />}
+      {error && <p>{error}</p>}
+      {data && <SongList items={data} />}
+    </section>
   );
 };
 

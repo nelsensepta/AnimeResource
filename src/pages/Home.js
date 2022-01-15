@@ -49,7 +49,7 @@ const Home = () => {
   //   }
   // }, [debouncedSearchTerm, trending]);
   return (
-    <Layout>
+    <>
       <section>
         <div className={styles.card_title}>
           <h1 className={styles.title}>Top 10 Trending Anime {currentYear}!</h1>
@@ -126,7 +126,7 @@ const Home = () => {
           />
         )}
       </section> */}
-    </Layout>
+    </>
   );
 };
 

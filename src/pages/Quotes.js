@@ -8,7 +8,6 @@ import QuoteSingle from "../components/quotes/QuoteSingle";
 import Spinner from "../components/ui/Spinner";
 import { BiSearch } from "react-icons/bi";
 import stylesHome from "./Home.module.css";
-import Layout from "../components/layout/Layout";
 
 const Quotes = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -70,32 +69,30 @@ const Quotes = () => {
   ];
 
   return (
-    <Layout>
-      <section className={styles.popular}>
-        {/* <h1 className="title">
+    <section className={styles.popular}>
+      {/* <h1 className="title">
         Top 10 Free{" "}
         <span className={styles.lead}>
           {selectedCategory ? selectedCategory : "To Play"}
         </span>{" "}
         Games for PC and Browser in {currentMonth} {currentYear}
       </h1> */}
-        <form className={stylesHome.form}>
-          <label>
-            <BiSearch className={stylesHome.search_icon} />
-            <input
-              onChange={(e) => setSearchTerm(e.target.value)}
-              type="search"
-              placeholder="Search for Anime, Character"
-              className={stylesHome.input}
-            />
-          </label>
-        </form>
+      <form className={stylesHome.form}>
+        <label>
+          <BiSearch className={stylesHome.search_icon} />
+          <input
+            onChange={(e) => setSearchTerm(e.target.value)}
+            type="search"
+            placeholder="Search for Anime, Character"
+            className={stylesHome.input}
+          />
+        </label>
+      </form>
 
-        {isPending && <Spinner />}
-        {error && <p>{error}</p>}
-        {data && <QuoteSingle item={data} />}
-      </section>
-    </Layout>
+      {isPending && <Spinner />}
+      {error && <p>{error}</p>}
+      {data && <QuoteSingle item={data} />}
+    </section>
   );
 };
 
