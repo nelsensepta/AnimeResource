@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { FaSpotify, FaHeart } from "react-icons/fa";
 import { GoBrowser } from "react-icons/go";
 import Genre from "../genres";
-import { convertMinute } from "../../lib/convertMinute";
+import { convertMinute } from "../../lib/Lib";
 // styles
 import styles from "./SongItem.module.css";
 

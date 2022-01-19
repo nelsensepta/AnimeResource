@@ -50,14 +50,14 @@
 
 .games_content {
   /* overflow: hidden; */
-  margin-top: 5rem;
+  margin: 5rem 0;
 }
 
 .card_title {
-  margin-top: 11rem;
+  margin: 11rem 0 3rem;
 }
 
 .title {
-  text-align: center;
+  text-align: start;
   font-size: 3rem;
 }

@@ -16,7 +16,6 @@ import { RandomString } from "../lib/Lib";
 // import TrendingList from "../components/anime/trending/TrendingList";
 import TrendingItem from "../components/anime/trending/TrendingItem";
 import PopularityItem from "../components/anime/popularity/PopularityItem";
-import { useInfinity } from "../hooks/useInfinity";
 SwiperCore.use([Autoplay, Navigation]);
 const Home = () => {
   const [filteredGames, setFilteredGames] = useState([]);
@@ -24,13 +23,8 @@ const Home = () => {
   const [randomAnime, setRandomAnime] = useState({
     data: [],
     links: {},
+    loading: null,
   });
-
-  // useEffect(() => {
-  //   const { res, isPending, error } = useInfinity(
-  //     `${process.env.REACT_APP_API_URL_ANIME}/anime?page[limit]=20&page[offset]=0`
-  //   );
-  // }, []);
 
   // const [pending, setPending] = useState(false);
 
@@ -45,21 +39,26 @@ const Home = () => {
   // console.log(res);
 
   // setRandomAnime({ ok: "y", oi: 1 });
-  // const { res, isPending, error } = useInfinity(
-  //   `${process.env.REACT_APP_API_URL_ANIME}/anime?page[limit]=20&page[offset]=0`
-  // );
+  const { res, isPending, error } = useFetch(
+    `${process.env.REACT_APP_API_URL_ANIME}/anime?page[limit]=20&page[offset]=0`
+  );
 
   // console.log(res);
   // console.log("Pending : ", isPending);
   // console.log(randomAnime !== (undefined || null));
+  console.log(randomAnime.data[0] === undefined);
 
-  // try {
-  //   if (randomAnime.data[0] === undefined && isPending === false) {
-  //     setRandomAnime({ data: res.data, links: res.links });
-  //   }
-  // } catch (err) {
-  //   console.log(err);
-  // }
+  try {
+    if (randomAnime.data[0] === undefined && isPending === false) {
+      setRandomAnime({
+        data: res.data,
+        links: res.links,
+        loading: true,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
   // try {
   //   if (isPending === false) {
   //   }
@@ -68,29 +67,21 @@ const Home = () => {
   // }
   // console.log(randomAnime.res);
   const moreAnime = () => {
-    // try {
-    //   const { res, isPending, error } = useInfinity(randomAnime.links.next);
-    //   setRandomAnime((randomAnime) => {
-    //     var obj = {
-    //       data: randomAnime.data.concat(res.data),
-    //       links: res.links,
-    //     };
-    //     return obj;
-    //   });
-    //   // fetch(randomAnime.links.next)
-    //   //   .then((resJson) => resJson.json())
-    //   //   .then((res) =>
-    //   //     setRandomAnime((randomAnime) => {
-    //   //       var obj = {
-    //   //         data: randomAnime.data.concat(res.data),
-    //   //         links: res.links,
-    //   //       };
-    //   //       return obj;
-    //   //     })
-    //   //   );
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      fetch(randomAnime.links.next)
+        .then((resJson) => resJson.json())
+        .then((res) =>
+          setRandomAnime((randomAnime) => {
+            return {
+              data: randomAnime.data.concat(res.data),
+              links: res.links,
+              loading: false,
+            };
+          })
+        );
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   console.log(randomAnime);
@@ -243,13 +234,12 @@ const Home = () => {
         <div className={styles.card_title}>
           <h1 className={styles.title}>List Anime {currentYear}!</h1>
         </div>
-        {/* {isPending && <Spinner />} */}
-        {/* {error && <p>{error}</p>}
+        {isPending && <Spinner />}
+        {error && <p>{error}</p>}
         {randomAnime.data && (
-          <RandomList items={randomAnime.data} isPending={isPending} />
+          <RandomList items={randomAnime.data} loading={randomAnime.loading} />
         )}
-        <button onClick={() => moreAnime()}>Show more</button> */}
-        <p>Problem Infinity Scrool</p>
+        <button onClick={() => moreAnime()}>Show more</button>
       </section>
     </>
   );

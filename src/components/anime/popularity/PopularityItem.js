@@ -1,20 +1,18 @@
-// import styles from "./TrendingItem.module.css";
+// import styles from "./PopularityItem.module.css";
 // import { useState, useEffect } from "react";
 // import { AiFillStar } from "react-icons/ai";
 // import { useFetch } from "../../../hooks/useFetch";
 // import Spinner from "../../ui/Spinner";
 // import { Year } from "../../../lib/Lib";
 
-// export default function TrendingItem({ anime }) {
+// export default function PopularityItem({ anime }) {
 //   // const [genreAnime, setGenreAnime] = useState([]);
 //   // console.log(genreAnime);
 //   const {
 //     res: genreAnime,
 //     isPending: genreAnimePending,
 //     error: genreAnimeErr,
-//   } = useFetch(
-//     `${process.env.REACT_APP_API_URL_ANIME}${anime.relationships.categories.links.related}`
-//   );
+//   } = useFetch(`${anime.relationships.categories.links.related}`);
 //   // console.log(genreAnime);
 //   // fetch(
 //   //   `${process.env.REACT_APP_API_URL_ANIME}${anime.relationships.categories.links.related}`
@@ -55,7 +53,7 @@
 //           | {Year(anime.attributes.startDate)}
 //         </a>
 //         <div className={styles.wrapper_rating}>
-//          <span className={styles.icon}>
+//           <span className={styles.icon}>
 //           <AiFillStar  />
 //           </span>
 //           <span className={styles.rating}>

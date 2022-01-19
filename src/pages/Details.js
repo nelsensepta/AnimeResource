@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useParams } from "react-router";
 import { AiFillHeart, AiFillWindows } from "react-icons/ai";
 import { GoBrowser } from "react-icons/go";
@@ -9,17 +9,54 @@ import parse from "html-react-parser";
 // styles
 import styles from "./Details.module.css";
 import Spinner from "../components/ui/Spinner";
-import Layout from "../components/layout/Layout";
+// import Layout from "../components/layout/Layout";
+import { Year } from "../lib/Lib";
 
 const Details = () => {
   const { slug } = useParams();
+  const [genres, setGenres] = useState([]);
+  // const [pendingGenres, setPendingGenres] = useState(false);
+  // const [err, setErr] = useState("");
+  console.log(genres);
+  // console.log(pendingGenres);
+
   const {
-    data: anime,
-    isPending,
-    error,
+    res: anime,
+    isPending: animePending,
+    error: animeErr,
   } = useFetch(
     `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[slug]=${slug}`
   );
+
+  try {
+    fetch(`${anime.data[0].relationships.categories.links.related}`)
+      .then((resJson) => resJson.json())
+      .then((res) => genres.length === 0 && setGenres(res.data));
+  } catch (error) {
+    // // setPendingGenres(!pendingGenres);
+    // console.log(error)
+    return <p>ok</p>;
+    // setErr(error);
+  }
+
+  // const cek = async () => {
+  //   try {
+  //     if (animePending === false) return console.log(genreAnime);
+  //   } catch (error) {
+  //     return alert(animePending);
+  //   }
+  // };
+
+  // cek();
+
+  // const {
+  //   res: genreAnime,
+  //   isPending: genreAnimePending,
+  //   error: genreAnimeErr,
+  // } = useFetch(`${anime.data[0].relationships.categories.links.related}`);
+  // console.log(genreAnime);
+  // console.log(genreAnimeErr);
+  // console.log(genreAnimePending);
 
   // const { anime } = data.data;
   // console.log(anime);
@@ -31,8 +68,8 @@ const Details = () => {
 
   return (
     <section className={styles.detail}>
-      {isPending && <Spinner />}
-      {error && <p>{error}</p>}
+      {animePending && <Spinner />}
+      {animeErr && <p>{animeErr}</p>}
       {anime && (
         <>
           <div className={styles.wrapper_thumb}>
@@ -48,8 +85,34 @@ const Details = () => {
           <div className={styles.content}>
             <div className={styles.data}>
               <h1 className={styles.title}>
-                {anime.data[0].attributes.titles.en}
+                {anime.data[0].attributes.titles.en ||
+                  (anime.data[0].attributes.titles.en_jp &&
+                    anime.data[0].attributes.titles.en_jp)}
               </h1>
+              <span>
+                {anime.data[0].attributes.subtype} |{" "}
+                {anime.data[0].attributes.ageRatingGuide} |{" "}
+                {Year(anime.data[0].attributes.startDate)}
+              </span>
+              {/* {pendingGenres && <Spinner />} */}
+              {/* {genreAnimeErr && <p>{genreAnimeErr}</p>} */}
+              <div className={styles.genres}>
+                {genres &&
+                  genres.map((genre) => (
+                    <a
+                      key={genre.id}
+                      href={`/anime/genre/${genre.attributes.slug}`}
+                      className={styles.genre}
+                    >
+                      {genre.attributes.title}
+                    </a>
+                  ))}
+              </div>
+              {/* <span>
+                {" "}
+                {anime.data[0].relationships.categories.links.related}{" "}
+              </span> */}
+              {/* <span>Start Date{anime.data[0].attributes.startDate}</span> */}
               <article>{anime.data[0].attributes.description}</article>
             </div>
           </div>

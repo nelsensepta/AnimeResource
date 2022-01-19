@@ -2,7 +2,9 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AiFillWindows, AiFillHeart } from "react-icons/ai";
 import { GoBrowser } from "react-icons/go";
+import { AiFillStar } from "react-icons/ai";
 import Genre from "../../genres";
+import { Year } from "../../../lib/Lib";
 // styles
 import styles from "./RandomItem.module.css";
 
@@ -21,33 +23,24 @@ const RandomList = ({ item: anime }) => {
         <img
           className={styles.thumbnail}
           src={anime.attributes.posterImage.original}
-          alt="test"
+          alt={anime.attributes.titles.en}
         />
       </Link>
       <div className={styles.card_body}>
         <Link to={`/anime/${anime.attributes.slug}`} className={styles.title}>
-          {anime.attributes.titles.en}
+          {anime.attributes.titles.en ||
+            (anime.attributes.titles.en_jp && anime.attributes.titles.en_jp)}
         </Link>
-        <p className={`${styles.description} text-muted`}>
-          {anime.attributes.description}
-        </p>
-        <div className={styles.card_footer}>
-          {/* <div>
-            {anime.genres.map((g) => (
-              <Genre genre={g} />
-            ))}
-            {anime.platform.includes("PC (Windows)") ? (
-              <AiFillWindows
-                className={styles.platform_icon}
-                title="Available on Windows"
-              />
-            ) : (
-              <GoBrowser
-                className={styles.platform_icon}
-                title="Available on Browser"
-              />
-            )}
-          </div> */}
+        <div className={styles.data}>
+          <div className={styles.wrapper_rating}>
+            <span className={styles.icon}>
+              <AiFillStar />
+            </span>
+            <span className={styles.rating}>
+              {anime.attributes.averageRating} | {anime.attributes.showType} |{" "}
+              {Year(anime.attributes.startDate)}
+            </span>
+          </div>
           <button
             onClick={() => addToFavorite(anime)}
             className={styles.btn}
@@ -65,6 +58,25 @@ const RandomList = ({ item: anime }) => {
             />
           </button>
         </div>
+
+        {/* <div className={styles.card_footer}>
+          <div>
+            {anime.genres.map((g) => (
+              <Genre genre={g} />
+            ))}
+            {anime.platform.includes("PC (Windows)") ? (
+              <AiFillWindows
+                className={styles.platform_icon}
+                title="Available on Windows"
+              />
+            ) : (
+              <GoBrowser
+                className={styles.platform_icon}
+                title="Available on Browser"
+              />
+            )}
+          </div>
+        </div> */}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export const useFetch = (url) => {
-  const [data, setData] = useState(null);
+  const [res, setRes] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
 
@@ -9,7 +9,7 @@ export const useFetch = (url) => {
     const controller = new AbortController();
     const { signal } = controller;
 
-    setData(null);
+    setRes(null);
     setIsPending(true);
     setError(null);
 
@@ -23,7 +23,7 @@ export const useFetch = (url) => {
         }
 
         const result = await response.json();
-        setData(result);
+        setRes(result);
         setIsPending(false);
         setError(null);
       } catch (error) {
@@ -42,5 +42,5 @@ export const useFetch = (url) => {
     return () => controller.abort();
   }, [url]);
 
-  return { data, isPending, error };
+  return { res, isPending, error };
 };

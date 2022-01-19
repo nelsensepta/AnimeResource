@@ -3,8 +3,11 @@
 :root {
   --font-primary: "Nunito Sans", sans-serif;
   --font-secondary: "Inter", sans-serif;
-  --bg-header: #272b30;
-  --bg-footer: #1c1e22;
+  /* --bg-header: #272b30;
+  /*
+  --bg-footer: #1c1e22; */
+  --bg-footer: #000000;
+  --bg-header: #0c1f3b;
 }
 
 * {
@@ -18,9 +21,17 @@ html {
   height: 100%;
 }
 
-body {
+/* body {
   height: 100%;
   background-color: #2a2e33;
+  color: #aaa;
+  font-family: var(--font-primary);
+  font-size: 1.6rem;
+  line-height: 1.5;
+} */
+body {
+  height: 100%;
+  background-color: #000;
   color: #aaa;
   font-family: var(--font-primary);
   font-size: 1.6rem;

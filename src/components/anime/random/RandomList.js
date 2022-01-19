@@ -2,9 +2,10 @@
 import styles from "./RandomList.module.css";
 import RandomItem from "./RandomItem";
 // import AnimeTrending from "../trending/TrendingItem";
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 
 const RandomList = ({ items }) => {
+  console.log(items);
   return (
     <div className={styles.grid}>
       {items.map((anime) => (
