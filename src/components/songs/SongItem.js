@@ -4,6 +4,8 @@ import { FaSpotify, FaHeart } from "react-icons/fa";
 import { GoBrowser } from "react-icons/go";
 import Genre from "../genres";
 import { convertMinute } from "../../lib/Lib";
+import { useTranslation } from "react-i18next";
+
 // styles
 import styles from "./SongItem.module.css";
 
@@ -11,8 +13,9 @@ import { FavoritesContext } from "../../context/FavoritesContext";
 
 const GameItem = ({ item: song }) => {
   const { addToFavorite, gameIsFavorite } = useContext(FavoritesContext);
-  console.log(song.duration);
-  console.log(convertMinute(6000));
+  // console.log(song.duration);
+  // console.log(convertMinute(6000));
+  // const { t } = useTranslation();
 
   return (
     <div className={styles.card}>

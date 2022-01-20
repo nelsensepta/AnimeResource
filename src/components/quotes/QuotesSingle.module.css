@@ -1,0 +1,17 @@
+.anime {
+  color: blanchedalmond;
+}
+.character {
+  color: beige;
+}
+
+.quote {
+  font-size: 4rem;
+  color: gray;
+}
+
+.card {
+  text-align: center;
+  /* width: 75%; */
+  margin: 10rem auto 0;
+}

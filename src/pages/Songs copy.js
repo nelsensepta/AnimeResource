@@ -7,19 +7,13 @@ import SongList from "../components/songs/SongList";
 import Spinner from "../components/ui/Spinner";
 import stylesHome from "./Home.module.css";
 import { BiSearch } from "react-icons/bi";
-import { useTranslation } from "react-i18next";
-import i18next from "i18next";
 
 const Songs = () => {
-  // function handleClick(lang) {
-  //   i18next.changeLanguage(lang);
-  // }
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [allAnime, setAllAnime] = useState([]);
-  let url = `${process.env.REACT_APP_API_URL_SONGS}/song`;
+  let url = `${process.env.REACT_APP_API_URL_SONGS}/random/song/50`;
   const { res, isPending, error } = useFetch(url);
-  console.log(res);
 
   // if (selectedCategory) {
   //   url = `${process.env.REACT_APP_API_URL_ANIME}/v1/song?sort-by=popularity&category=${selectedCategory}`;
@@ -44,9 +38,6 @@ const Songs = () => {
     <section className={styles.content}>
       <div className={styles.card_title}>
         <h1 className={styles.title}>List Songs Anime 2022</h1>
-        {/* <button onClick={() => handleClick("en")}>English</button>
-        <button onClick={() => handleClick("jp")}>Japan</button>
-        <button onClick={() => handleClick("id")}>Indonesia</button> */}
       </div>
       {/* <h1 className="title">
         Top 10 Free{" "}
@@ -85,7 +76,7 @@ const Songs = () => {
 
       {isPending && <Spinner />}
       {error && <p>{error}</p>}
-      {res && <SongList items={res.data} />}
+      {res && <SongList items={res} />}
     </section>
   );
 };

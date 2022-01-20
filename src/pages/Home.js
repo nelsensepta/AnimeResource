@@ -9,6 +9,7 @@ import "swiper/swiper-bundle.min.css";
 import "swiper/swiper.min.css";
 
 // styles
+import AnimeService from "../services/AnimeService";
 import styles from "./Home.module.css";
 import RandomList from "../components/anime/random/RandomList";
 import Spinner from "../components/ui/Spinner";
@@ -21,10 +22,39 @@ SwiperCore.use([Autoplay, Navigation]);
 const Home = () => {
   const [filteredGames, setFilteredGames] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [randomAnime, setRandomAnime] = useState({
-    data: [],
-    links: {},
-  });
+  const [randomAnime, setRandomAnime] = useState([]);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [noData, setNoData] = useState(false);
+  useEffect(() => {
+    loadUserList(page);
+  }, []);
+
+  const loadUserList = (page) => {
+    setLoading(true);
+    setTimeout(() => {
+      AnimeService.getList(page)
+        .then((res) => {
+          const newPage = page + 20;
+          const newList = randomAnime.concat(res);
+          setRandomAnime(newList);
+          setPage(newPage);
+          if (res.length === 0) setNoData(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }, 1500);
+  };
+
+  const moreAnime = () => {
+    if (!noData) {
+      loadUserList(page);
+    }
+  };
 
   // useEffect(() => {
   //   const { res, isPending, error } = useInfinity(
@@ -67,31 +97,31 @@ const Home = () => {
   //   console.log(err);
   // }
   // console.log(randomAnime.res);
-  const moreAnime = () => {
-    // try {
-    //   const { res, isPending, error } = useInfinity(randomAnime.links.next);
-    //   setRandomAnime((randomAnime) => {
-    //     var obj = {
-    //       data: randomAnime.data.concat(res.data),
-    //       links: res.links,
-    //     };
-    //     return obj;
-    //   });
-    //   // fetch(randomAnime.links.next)
-    //   //   .then((resJson) => resJson.json())
-    //   //   .then((res) =>
-    //   //     setRandomAnime((randomAnime) => {
-    //   //       var obj = {
-    //   //         data: randomAnime.data.concat(res.data),
-    //   //         links: res.links,
-    //   //       };
-    //   //       return obj;
-    //   //     })
-    //   //   );
-    // } catch (err) {
-    //   console.log(err);
-    // }
-  };
+  // const moreAnime = () => {
+  //   // try {
+  //   //   const { res, isPending, error } = useInfinity(randomAnime.links.next);
+  //   //   setRandomAnime((randomAnime) => {
+  //   //     var obj = {
+  //   //       data: randomAnime.data.concat(res.data),
+  //   //       links: res.links,
+  //   //     };
+  //   //     return obj;
+  //   //   });
+  //   //   // fetch(randomAnime.links.next)
+  //   //   //   .then((resJson) => resJson.json())
+  //   //   //   .then((res) =>
+  //   //   //     setRandomAnime((randomAnime) => {
+  //   //   //       var obj = {
+  //   //   //         data: randomAnime.data.concat(res.data),
+  //   //   //         links: res.links,
+  //   //   //       };
+  //   //   //       return obj;
+  //   //   //     })
+  //   //   //   );
+  //   // } catch (err) {
+  //   //   console.log(err);
+  //   // }
+  // };
 
   console.log(randomAnime);
 
@@ -104,7 +134,7 @@ const Home = () => {
   // );
   // console.log(popularityAnime);
 
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  // const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   const currentYear = new Date().getFullYear();
 
@@ -243,13 +273,12 @@ const Home = () => {
         <div className={styles.card_title}>
           <h1 className={styles.title}>List Anime {currentYear}!</h1>
         </div>
-        {/* {isPending && <Spinner />} */}
-        {/* {error && <p>{error}</p>}
-        {randomAnime.data && (
-          <RandomList items={randomAnime.data} isPending={isPending} />
-        )}
-        <button onClick={() => moreAnime()}>Show more</button> */}
+        <p>Sedang Membuat Quotes</p>
+        {randomAnime && <RandomList items={randomAnime} />}
+        <button onClick={() => moreAnime()}>Show more</button>
         <p>Problem Infinity Scrool</p>
+        {loading && <Spinner />}
+        {noData && <div className="text-center">no data anymore ...</div>}
       </section>
     </>
   );

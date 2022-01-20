@@ -5,7 +5,7 @@ import SongItem from "./SongItem";
 const SongList = ({ items }) => {
   return (
     <div className={styles.grid}>
-      {items.data.map((song) => (
+      {items.documents.map((song) => (
         <SongItem key={song.id} item={song} />
       ))}
     </div>
