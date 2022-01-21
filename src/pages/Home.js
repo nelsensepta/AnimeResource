@@ -66,11 +66,12 @@ const Home = () => {
 
   // const [err, setErr] = useState("");
 
-  // const {
-  //   res: trendingAnime,
-  //   isPending: trendingPending,
-  //   error: trendingErr,
-  // } = useFetch(`${process.env.REACT_APP_API_URL_ANIME}/trending/anime`);
+  const {
+    res: trendingAnime,
+    isPending: trendingPending,
+    error: trendingErr,
+  } = useFetch(`${process.env.REACT_APP_API_URL_ANIME}/trending/anime`);
+  console.log(trendingAnime);
 
   // console.log(res);
 
@@ -168,7 +169,7 @@ const Home = () => {
           <p className="text-center">Sorry, no games found :(</p>
         )}
       </section> */}
-      {/* <section className={styles.games_content}>
+      <section className={styles.games_content}>
         <div className={styles.card_title}>
           <h1 className={styles.title}>Top 10 Trending Anime {currentYear}!</h1>
         </div>
@@ -182,21 +183,21 @@ const Home = () => {
           }}
           // grabCursor={true}
           slidesPerView={1}
-          spaceBetween={10}
-          breakpoints={{
-            640: {
-              slidesPerView: 1,
-              spaceBetween: 5,
-            },
-            768: {
-              slidesPerView: 2,
-              spaceBetween: 15,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 20,
-            },
-          }}
+          // spaceBetween={10}
+          // breakpoints={{
+          //   640: {
+          //     slidesPerView: 1,
+          //     spaceBetween: 5,
+          //   },
+          //   768: {
+          //     slidesPerView: 2,
+          //     spaceBetween: 15,
+          //   },
+          //   1024: {
+          //     slidesPerView: ,
+          //     spaceBetween: 20,
+          //   },
+          // }}
           // centeredSlides={true}
           // slidesPerView={"auto"}
           // coverflowEffect={{
@@ -216,7 +217,7 @@ const Home = () => {
               </SwiperSlide>
             ))}
         </Swiper>
-      </section> */}
+      </section>
       {/* <section className={styles.games_content}>
         <div className={styles.card_title}>
           <h1 className={styles.title}>
@@ -273,7 +274,7 @@ const Home = () => {
         <div className={styles.card_title}>
           <h1 className={styles.title}>List Anime {currentYear}!</h1>
         </div>
-        <p>Sedang Membuat Quotes</p>
+        {/* <p>Sedang Membuat Quotes</p> */}
         {randomAnime && <RandomList items={randomAnime} />}
         <button onClick={() => moreAnime()}>Show more</button>
         <p>Problem Infinity Scrool</p>

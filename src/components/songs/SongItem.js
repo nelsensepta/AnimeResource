@@ -26,6 +26,12 @@ const GameItem = ({ item: song }) => {
         <p>{convertMinute(song.duration)}</p>
         <p>{song.artist}</p>
         <p>{song.albun}</p>
+        {/* <div className={styles.card_audio}>
+          <audio controls src={`${song.preview_url}`}>
+            <source src={`${song.preview_url}`} type="audio/mp3" />
+            Your browser dose not Support the audio Tag
+          </audio>
+        </div> */}
         <div className={styles.card_footer}>
           <a
             href={`${song.local_spotify_url}`}
@@ -34,6 +40,7 @@ const GameItem = ({ item: song }) => {
           >
             <FaSpotify className={styles.heart_icon} />
           </a>
+
           <button
             onClick={() => addToFavorite(song)}
             className={styles.btn}
