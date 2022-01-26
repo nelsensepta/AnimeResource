@@ -13,90 +13,120 @@ import Spinner from "../components/ui/Spinner";
 // import Layout from "../components/layout/Layout";
 import { Year } from "../lib/Lib";
 import Genres from "../components/genres/Genres";
+import Character from "../components/anime/details/Character";
 
 const Details = () => {
   const { slug } = useParams();
-  // const [genres, setGenres] = useState();
+  const [details, setDetails] = useState();
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState();
+  // console.log(details.data[0].id);
 
-  // console.log(genres);
+  // Character
+  const [char, setChar] = useState([]);
+  // const [people, setPeople] = useState([]);
+  const [page, setPage] = useState(0);
+  const [noData, setNoData] = useState(false);
+  const [loadingChar, setLoadingChar] = useState(false);
+  // details && console.log(details.data[0].id);
 
-  const {
-    res: anime,
-    isPending: animePending,
-    error: animeErr,
-  } = useFetch(
-    `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[slug]=${slug}&include=categories,characters`
-  );
+  // const {
+  //   res: anime,
+  //   isPending: animePending,
+  //   error: animeErr,
+  // } = useFetch(
+  //   `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[slug]=${slug}&include=categories,characters`
+  // );
 
   // console.log(anime);
-  const ok =
-    "https://kitsu.io/api/edge/castings?filter[media_type]=Anime&filter[media_id]=7442&filter[is_character]=true&filter[language]=Japanese&include=character,person&sort=-featured";
+  // const ok =
+  //   "https://kitsu.io/api/edge/castings?filter[media_type]=Anime&filter[media_id]=7442&filter[is_character]=true&filter[language]=Japanese&include=character,person&sort=-featured";
 
-  // console.log(animePending);
-  // console.log(anime);
-  // if (animePending === false && anime !== null) {
-  //   console.log("ok");
-  //   console.log(anime.data[0].relationships.categories.links.related);
-  // }
-  // console.log(detail);
+  useEffect(() => {
+    loadCharList(page);
+    let abortController = new AbortController();
+    if (!details) {
+      setLoading(true);
+      if (!abortController.signal.aborted) {
+        setTimeout(() => {
+          AnimeService.getDetails(
+            `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[slug]=${slug}&include=categories`
+          )
+            .then((data) => setDetails(data))
+            .catch((error) => setErr(`${error}`))
+            .finally(() => {
+              setLoading(false);
+            });
+        }, 500);
+      }
+    } else {
+      setLoading(false);
+    }
+    return () => {
+      abortController.abort();
+    };
+  }, [details]);
 
-  // try {
-  //   fetch(anime.data[0].relationships.categories.links.related)
-  //     .then((res) => res.json())
-  //     .then((resJson) => console.log(resJson));
-  // } catch (error) {
-  //   // setErr(`${error}`);
-  //   // throw error;
-  //   console.log("ok");
-  // }
+  const fillPeopleOrChar = (data, value) => {
+    // return relasi.type === "people";
+    return data.filter((relasi) => relasi.type === value);
+  };
 
-  // useEffect(() => {
-  //   let abortController = new AbortController();
-  //   if (anime !== null && animePending === false) {
-  //     console.log("Masuk");
-  //     console.log(anime.data[0]);
-  //     setLoading(true);
-  //     if (!abortController.signal.aborted) {
-  //       setTimeout(() => {
-  //         AnimeService.getGenres(
-  //           // "https://kitsu.io/api/edge/anime/44081/categories"
-  //           anime.data[0].relationships.categories.links.related
-  //         )
-  //           .then((data) => setGenres(data))
-  //           .catch((error) => setErr(`${error}`))
-  //           .finally(() => {
-  //             setLoading(false);
-  //           });
-  //       }, 500);
-  //     }
-  //   } else {
-  //     setLoading(false);
-  //   }
-  //   return () => {
-  //     abortController.abort();
-  //   };
-  // }, [genres]);
+  const loadCharList = (page) => {
+    if (details) {
+      setLoadingChar(true);
+      setTimeout(() => {
+        AnimeService.getCharacter(details.data[0].id, page)
+          .then((res) => {
+            const newPage = page + 20;
+            // console.log(res);
+            // const newChar = char.concat(fillPeopleOrChar(res, "characters"));
+            const newChar = char.concat();
+            setChar(newChar);
+
+            // setPeople(newPeople);
+            setPage(newPage);
+            if (res.length === 0) setNoData(true);
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => {
+            setLoadingChar(false);
+          });
+      }, 1500);
+    }
+  };
+
+  // console.log(char);
+  // console.log(people);
+
+  const moreChar = () => {
+    if (!noData) {
+      loadCharList(page);
+    }
+  };
 
   // const { gameIsFavorite, addToFavorite } = useContext(FavoritesContext);
 
   // console.log(anime.data[0].attributes.youtubeVideoId);
   return (
     <section className={styles.detail}>
-      {animePending && <Spinner />}
-      {animeErr && <p>{animeErr}</p>}
-      {anime && (
+      {loading && <Spinner />}
+      {err && <p>{err}</p>}
+      {details && (
         <>
           <div className={styles.wrapper_thumb}>
             <img
               className={styles.thumbnail}
               src={
-                anime.data[0].attributes.coverImage &&
-                anime.data[0].attributes.coverImage.original
+                details.data[0].attributes.coverImage &&
+                details.data[0].attributes.coverImage.original
               }
-              alt={anime.data[0].attributes.titles.en}
+              alt={details.data[0].attributes.titles.en}
               style={{
-                height: anime.data[0].attributes.coverImage
-                  ? `${anime.data[0].attributes.coverImage.meta.dimensions.small.height}px`
+                height: details.data[0].attributes.coverImage
+                  ? `${details.data[0].attributes.coverImage.meta.dimensions.small.height}px`
                   : "800px",
               }}
             />
@@ -104,24 +134,24 @@ const Details = () => {
           <div className={styles.content}>
             <div className={styles.data}>
               <h1 className={styles.title}>
-                {anime.data[0].attributes.titles.en ||
-                  (anime.data[0].attributes.titles.en_jp &&
-                    anime.data[0].attributes.titles.en_jp)}
+                {details.data[0].attributes.titles.en ||
+                  (details.data[0].attributes.titles.en_jp &&
+                    details.data[0].attributes.titles.en_jp)}
               </h1>
               <span>
-                {anime.data[0].attributes.subtype} |{" "}
-                {anime.data[0].attributes.ageRatingGuide} |{" "}
-                {Year(anime.data[0].attributes.startDate)}
+                {details.data[0].attributes.subtype} |{" "}
+                {details.data[0].attributes.ageRatingGuide} |{" "}
+                {Year(details.data[0].attributes.startDate)}
               </span>
               {/* <p>Propblem Pending Oke Genres</p> */}
               {/* <Genres
-                genres={anime.data[0].relationships.categories.links.related}
+                genres={details.data[0].relationships.categories.links.related}
               /> */}
               {/* <div className={styles.genres}>
-                {anime.included.map((genre) => (
+                {details.included.map((genre) => (
                   <a
                     key={genre.id}
-                    href={`/anime/genre/${genre.attributes.slug}`}
+                    href={`/details/genre/${genre.attributes.slug}`}
                     className={styles.genre}
                   >
                     {genre.attributes.title}
@@ -131,50 +161,47 @@ const Details = () => {
               </div> */}
               {/* <span>
                 {" "}
-                {anime.data[0].relationships.categories.links.related}{" "}
+                {details.data[0].relationships.categories.links.related}{" "}
               </span> */}
-              {/* <span>Start Date{anime.data[0].attributes.startDate}</span> */}
-              <div className={styles.genres}>
-                {anime.included
+              {/* <span>Start Date{details.data[0].attributes.startDate}</span> */}
+              {/* <div className={styles.genres}>
+                {details.included
                   .filter((relasi) => relasi.type === "categories")
                   .map((genre) => (
                     <a
                       key={genre.id}
-                      href={`/anime/genre/${genre.attributes.slug}`}
+                      href={`/details/genre/${genre.attributes.slug}`}
                       className={styles.genre}
                     >
                       {genre.attributes.title}
                     </a>
                   ))}
-              </div>
+              </div> */}
 
               {/* {pendingGenres && <Spinner />}
-              {genreAnimeErr && <p>{genreAnimeErr}</p>} */}
-              {/* <p>{anime.data[0].relationships.categories.links.related}</p> */}
+              {genredetailsErr && <p>{genredetailsErr}</p>} */}
+              {/* <p>{details.data[0].relationships.categories.links.related}</p> */}
 
-              <iframe
+              {/* <iframe
                 width="420"
                 height="315"
-                src={`https://www.youtube.com/embed/${anime.data[0].attributes.youtubeVideoId}`}
-              ></iframe>
-              <article>{anime.data[0].attributes.description}</article>
+                src={`https://www.youtube.com/embed/${details.data[0].attributes.youtubeVideoId}`}
+              ></iframe> */}
+              <article>{details.data[0].attributes.description}</article>
               <div className={styles.genres}>
-                {anime.included
-                  .filter((relasi) => relasi.type === "mediaCharacters")
-                  .map((kederCuk) => (
-                    <a
-                      key={kederCuk.id}
-                      href={`/anime/genre/${kederCuk.attributes.role}`}
-                      className={styles.genre}
-                    >
-                      {kederCuk.relationships.character.links.related}
-                    </a>
-                  ))}
+                <button
+                  // href={`/details/genre/${kederCuk.attributes.role}`}
+                  className={styles.ok}
+                  onClick={() => moreChar()}
+                >
+                  Character
+                </button>
+                {/* <Character char={char} people={people} /> */}
               </div>
             </div>
           </div>
         </>
-        //  {parse(anime.data[0].attributes.) ||
+        //  {parse(details.data[0].attributes.) ||
         //   (anime.data.descriptions.it && parse(anime.data.descriptions.it))}
 
         // {/* {parse(anime.data.descriptions.en)} */}

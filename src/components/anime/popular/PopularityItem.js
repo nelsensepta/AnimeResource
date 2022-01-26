@@ -42,7 +42,7 @@ export default function PopularityItem({ anime }) {
   return (
     <div className={styles.card}>
       <img
-        src={anime.attributes.posterImage.original}
+        src={anime.attributes.posterImage.medium}
         alt={anime.attributes.titles.en}
         className={styles.coverImg}
       />

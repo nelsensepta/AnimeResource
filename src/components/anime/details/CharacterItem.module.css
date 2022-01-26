@@ -1,0 +1,139 @@
+.card {
+  /* background: #32383e; */
+  border-radius: 5px;
+  width: 100%;
+  position: relative;
+  height: 100%;
+  /* box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.1); */
+}
+
+.card_header::before {
+  background-image: linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0.3));
+  content: "";
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.card_header {
+  display: block;
+  position: relative;
+  /* height: 160px; */
+  overflow: hidden;
+}
+
+.data {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+/* @supports (aspect-ratio: 16 / 10) {
+  .card_header {
+    aspect-ratio: 16 / 10;
+    height: initial;
+  }
+} */
+
+.thumbnail {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+}
+
+.card_body {
+  padding: 2rem;
+  bottom: 25px;
+  width: 100%;
+  /* overflow: hidden; */
+  position: absolute;
+}
+
+.title {
+  color: #aaaaaa;
+  font-size: 2rem;
+  /* overflow: hidden;
+  text-overflow: ellipsis; */
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title:hover {
+  color: #cfcfcf;
+  text-decoration: underline;
+}
+
+.wrapper_rating {
+  margin-top: 1rem;
+  display: flex;
+}
+.wrapper_rating .icon {
+  align-items: center;
+  font-size: 2rem;
+  color: gold;
+  opacity: 0.7;
+}
+
+.description {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card_footer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.card_footer div {
+  display: flex;
+  align-items: center;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 1.2rem;
+  padding: 2px 8px;
+  border-radius: 8px;
+  background-color: #7a8288;
+  color: #000000;
+  font-weight: 700;
+  margin-right: 1rem;
+}
+
+.platform_icon {
+  display: inline-block;
+  color: #7a8288;
+  font-size: 2rem;
+}
+
+.btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.heart_icon {
+  color: #aaaaaa;
+  font-size: 2rem;
+}
+
+.heart_icon:hover {
+  color: #fff;
+}

@@ -14,9 +14,9 @@ function App() {
     <Layout>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="Songs" element={<Songs />} />
-        <Route path="Favorites" element={<Favorites />} />
-        <Route path="Quotes" element={<Quotes />} />
+        <Route path="songs" element={<Songs />} />
+        <Route path="favorites" element={<Favorites />} />
+        <Route path="quotes" element={<Quotes />} />
         <Route path="anime/:slug" element={<Details />} />
       </Routes>
     </Layout>
