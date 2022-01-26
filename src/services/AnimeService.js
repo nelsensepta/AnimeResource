@@ -10,44 +10,95 @@ export default {
 
       const req = await fetch(url);
       const res = await req.json();
-      console.log(res.data);
+      // console.log(res.data);
       return res.data;
     } catch (error) {
       throw error;
     }
   },
   getQuotes: async (param, type) => {
-    if (type === "anime") {
-      const url = `${process.env.REACT_APP_API_URL_QUETOS}/quotes/anime?title=${param}`;
+    if (type === "character") {
+      const url = `${process.env.REACT_APP_API_URL_QUETOS}/quotes/character?name=${param}`;
       const req = await fetch(url);
-      if (req.ok) {
-        return await req.json();
+      if (!req.ok) {
+        throw new Error("Quotes not Found");
       } else {
-        console.log("Something went wrong");
+        return await req.json();
       }
       // return res;
-    } else {
-      const url = `${process.env.REACT_APP_API_URL_QUETOS}/quotes/character?title=${param}`;
-      const req = await fetch(url);
-      return await req.json();
       // return res;
+    } else {
+      const url = `${process.env.REACT_APP_API_URL_QUETOS}/quotes/anime?title=${param}`;
+      const req = await fetch(url);
+      const res = await req.json();
+      return res;
     }
   },
   getSongs: async (param, type) => {
     if (type === "title") {
       const url = `${process.env.REACT_APP_API_URL_SONGS}/song?title=${param}`;
       const req = await fetch(url);
-      if (req.ok) {
-        return await req.json();
-      } else {
-        console.log("Something went wrong");
-      }
-      // return res;
+      const res = await req.json();
+      return res;
     } else {
       const url = `${process.env.REACT_APP_API_URL_SONGS}/song?artist=${param}`;
       const req = await fetch(url);
-      return await req.json();
-      // return res;
+      const res = await req.json();
+      return res;
     }
   },
+  getAnime: async (param, type) => {
+    if (type === "anime") {
+      const url = `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[text]=${param}&page[limit]=16`;
+      const req = await fetch(url);
+      const res = await req.json();
+      return res;
+    } else {
+      const url = `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[title]=${param}`;
+      const req = await fetch(url);
+      const res = await req.json();
+      return res;
+    }
+  },
+
+  getGenres: async (url) => {
+    const req = await fetch(url);
+    // const res = await req.json();
+    if (!req.ok) {
+      throw new Error("Quotes not Found");
+    } else {
+      return await req.json();
+    }
+  },
+
+  getDetails: async (param, type) => {
+    let url;
+    switch (type) {
+      case "character":
+        url = `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[slug]=${param}`;
+      case "genre":
+        url = `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[slug]=${param}`;
+      default:
+        url = `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[slug]=${param}`;
+        break;
+      // const url = `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[slug]=${param}`;
+    }
+    const req = await fetch(url);
+    const res = await req.json();
+    return res;
+
+    // if (type === "slug") {
+    //   const url = `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[slug]=${param}`;
+    //   const req = await fetch(url);
+    //   const res = await req.json();
+    //   return res;
+    // } else {
+    //   const url = `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[title]=${param}`;
+    //   const req = await fetch(url);
+    //   const res = await req.json();
+    //   return res;
+    // }
+  },
 };
+
+// export default { getAnime, getSongs, getQuotes, getList };

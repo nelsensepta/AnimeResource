@@ -7,10 +7,13 @@ import SongList from "../components/songs/SongList";
 import Spinner from "../components/ui/Spinner";
 import stylesHome from "./Home.module.css";
 import { BiSearch } from "react-icons/bi";
+import { useDebounce } from "../hooks/useDebounce";
 import { useTranslation } from "react-i18next";
 // import i18next from "i18next";
 import { useSearchParams } from "react-router-dom";
 import AnimeService from "../services/AnimeService";
+import CatalogMagic from "../components/ui/skeleton/CatalogMagic";
+import Card from "../components/ui/skeleton/Card";
 
 const Songs = () => {
   // function handleClick(lang) {
@@ -23,41 +26,53 @@ const Songs = () => {
   const [loading, setLoading] = useState();
   const [err, setErr] = useState("");
   let [searchParams, setSearchParams] = useSearchParams();
-  let param = searchParams.get("tes");
+  let param = searchParams.get(`${search}`);
 
-  console.log(search);
+  // console.log(searchSongs);
+  const debouncedSearchTerm = useDebounce(param, 500);
+  // console.log(debouncedSearchTerm);
   const handleSearch = (e) => {
+    e.preventDefault();
+    // console.log("1", loading);
     const v = e.target.value;
-    if (v) {
-      setSearchParams({ tes });
+    if (v && search === "title") {
+      setSearchParams({ title: v });
+    } else if (v && search === "artist") {
+      setSearchParams({ artist: v });
     } else {
       setSearchParams({});
     }
   };
 
+  // console.log(param);
   useEffect(() => {
     let abortController = new AbortController();
-    if (param) {
+    if (debouncedSearchTerm) {
       setLoading(true);
       if (!abortController.signal.aborted) {
-        AnimeService.getSongs(param, "title")
-          .then((data) => setSearchSongs(data), setLoading(false))
-          .catch(() => setErr(`Batas 100 Per Jam`), setLoading(false));
+        setTimeout(() => {
+          AnimeService.getSongs(debouncedSearchTerm, `${search}`)
+            .then((data) => setSearchSongs(data))
+            .catch((error) => setErr(`Hasil tidak Ada Bro ${error}`))
+            .finally(() => {
+              setLoading(false);
+            });
+          // console.log("2", loading);
+        }, 500);
       }
+    } else {
+      setLoading(false);
     }
     return () => {
       abortController.abort();
     };
-  }, [param]);
+  }, [debouncedSearchTerm]);
 
-  // console.log(!allAnime.length);
-  // console.log(allAnime);
-  // console.log(param);
-  // console.log(tes);
+  // console.log(loading);
+
+  // console.log(loading);
   let url = `${process.env.REACT_APP_API_URL_SONGS}/random/song/20`;
   const { res, isPending, error } = useFetch(url);
-  console.log(res);
-  console.log(searchSongs);
 
   // if (selectedCategory) {
   //   url = `${process.env.REACT_APP_API_URL_ANIME}/v1/song?sort-by=popularity&category=${selectedCategory}`;
@@ -93,33 +108,52 @@ const Songs = () => {
         </span>{" "}
         Games for PC and Browser in {currentMonth} {currentYear}
       </h1> */}
-      <form className={stylesHome.form}>
-        <label>
-          <BiSearch className={stylesHome.search_icon} />
-          <input
-            value={param || ""}
-            onChange={handleSearch}
-            type="search"
-            placeholder="Search for titles"
-            className={stylesHome.input}
-          />
-        </label>
-      </form>
 
-      <div className={styles.filter}>
-        <select id="category" onChange={(e) => setSearch(e.target.value)}>
-          <option selected value="Title">
-            Title
-          </option>
-          <option value="Artist">Artist</option>
-        </select>
+      <div className={stylesHome.card_input}>
+        <form className={stylesHome.form}>
+          <label>
+            <BiSearch className={stylesHome.search_icon} />
+            <input
+              value={param || ""}
+              onChange={handleSearch}
+              type="search"
+              placeholder={`Search for ${search}`}
+              className={stylesHome.input}
+            />
+          </label>
+        </form>
+        <div className={styles.filter}>
+          <select
+            id="category"
+            onChange={(e) => setSearch(e.target.value)}
+            value={`${search}`}
+          >
+            <option value="title">Title</option>
+            <option value="artist">Artist</option>
+          </select>
+        </div>
       </div>
-      {loading && <Spinner />}
-      {err && <p>{err}</p>}
 
+      {err && <p>{err}</p>}
+      {loading &&
+        Array(9)
+          .fill()
+          .map((item, index) => <Card key={index} />)}
+
+      {searchSongs && <SongList items={searchSongs.data.documents} />}
+      {/* {searchSongs ? (
+        loading ? (
+          <p>INi loading Seach</p>
+        ) : (
+          <SongList items={searchSongs.data.documents} />
+        )
+      ) : (
+        res && <SongList items={res.data} />
+      )} */}
+
+      {!searchSongs && res && <SongList items={res.data} />}
       {isPending && <Spinner />}
       {error && <p>{error}</p>}
-      {res && <SongList items={res.data} />}
     </section>
   );
 };

@@ -1,21 +1,19 @@
-import styles from "./TrendingItem.module.css";
-// import { useState, useEffect } from "react";
+import styles from "./PopularityItem.module.css";
+import { useState, useEffect } from "react";
 import { AiFillStar } from "react-icons/ai";
 import { useFetch } from "../../../hooks/useFetch";
 import Spinner from "../../ui/Spinner";
 import { Year } from "../../../lib/Lib";
-import Genres from "../../genres/Genres";
 
-export default function TrendingItem({ anime }) {
+export default function PopularityItem({ anime }) {
   // const [genreAnime, setGenreAnime] = useState([]);
   // console.log(genreAnime);
-  // const {
-  //   res: genreAnime,
-  //   isPending: genreAnimePending,
-  //   error: genreAnimeErr,
-  // } = useFetch(
-  //   `${process.env.REACT_APP_API_URL_ANIME}${anime.relationships.categories.links.related}`
-  // );
+
+  const {
+    res: genreAnime,
+    isPending: genreAnimePending,
+    error: genreAnimeErr,
+  } = useFetch(`${anime.relationships.categories.links.related}`);
   // console.log(genreAnime);
   // fetch(
   //   `${process.env.REACT_APP_API_URL_ANIME}${anime.relationships.categories.links.related}`
@@ -64,7 +62,7 @@ export default function TrendingItem({ anime }) {
           </span>
         </div>
         {/* <p>{anime.relationships.genres.links.related}</p> */}
-        {/* <div className={styles.genres}>
+        <div className={styles.genres}>
           {genreAnimePending && <Spinner />}
           {genreAnimeErr && <p>{genreAnimeErr}</p>}
           {genreAnime &&
@@ -77,9 +75,7 @@ export default function TrendingItem({ anime }) {
                 {genre.attributes.title}
               </a>
             ))}
-        </div> */}
-
-        <Genres genres={anime.relationships.categories.links.related} />
+        </div>
       </div>
     </div>
   );

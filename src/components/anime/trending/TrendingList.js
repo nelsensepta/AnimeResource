@@ -23,15 +23,9 @@ const TrendingList = ({ items }) => {
   // }, []);
   return (
     <div className={styles.container}>
-      <button className="btn-left">
-        <FiChevronLeft className="icon" />
-      </button>
       {items.map((anime) => (
         <TrendingItem key={anime.id} anime={anime} />
       ))}
-      <button className="btn-right">
-        <FiChevronRight className="icon" />
-      </button>
     </div>
   );
 };

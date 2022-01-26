@@ -1,6 +1,6 @@
-<h1 align="center">Gametis</h1>
+<h1 align="center">Anime Resource</h1>
 
-Gametis adalah sebuah aplikasi web sederhana untuk mencari game gratis yg keren dan menarik yang dapat di mainkan di platform PC & Browser. User Interface (UI) nya simple, elegan, modern dan responsive.
+AnimeResource adalah sebuah aplikasi web sederhana untuk mencari Anime yg keren dan menarik dengan User Interface (UI) nya simple, elegan, modern dan responsive.
 
 ![screenshot](https://i.ibb.co/ZdM3H0h/gametis.png)
 
@@ -10,7 +10,7 @@ Untuk mengkloning dan menjalankan aplikasi ini, pastikan bahwa [Git](https://git
 
 ```bash
 # Clone this repository
-$ git clone https://github.com/indraAK/gametis.git
+# $ git clone https://github.com/indraAK/gametis.git
 
 # Install dependencies
 $ npm install
@@ -34,4 +34,6 @@ $ npm start
 - JavaScript
 - CSS
 
-_Sumber API Games Database dari [Free-to-Play Games Database](https://rapidapi.com/digiwalls/api/free-to-play-games-database)_
+_Sumber API Anime dari [Kitsu] (https://kitsu.docs.apiary.io/)_
+_Sumber API Anime Songs dari [Kitsu] (https://aniapi.com/docs/resources/song/)_
+_Sumber API Anime Quotes dari [Kitsu] (https://animechan.vercel.app//)_

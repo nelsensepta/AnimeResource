@@ -1,34 +1,74 @@
 import { useState, useEffect } from "react";
-// import { BiSearch } from "react-icons/bi";
 
 import { useFetch } from "../hooks/useFetch";
 import { useDebounce } from "../hooks/useDebounce";
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Autoplay, EffectCoverflow, Navigation } from "swiper";
-import "swiper/swiper-bundle.min.css";
-import "swiper/swiper.min.css";
-
+import { useSearchParams } from "react-router-dom";
 // styles
 import AnimeService from "../services/AnimeService";
+import { BiSearch } from "react-icons/bi";
 import styles from "./Home.module.css";
 import RandomList from "../components/anime/random/RandomList";
 import Spinner from "../components/ui/Spinner";
 import { RandomString } from "../lib/Lib";
-// import TrendingList from "../components/anime/trending/TrendingList";
+import TrendingList from "../components/anime/trending/TrendingList";
 import TrendingItem from "../components/anime/trending/TrendingItem";
-import PopularityItem from "../components/anime/popularity/PopularityItem";
+import PopularityItem from "../components/anime/popular/PopularityItem";
 import { useInfinity } from "../hooks/useInfinity";
-SwiperCore.use([Autoplay, Navigation]);
+import Random from "../components/anime/random/Random";
+import Popularity from "../components/anime/popular/Popularity";
+import Trending from "../components/anime/trending/Trending";
 const Home = () => {
-  const [filteredGames, setFilteredGames] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [filteredGames, setFilteredGames] = useState([]);
+  // const [searchTerm, setSearchTerm] = useState("");
+  const [search, setSearch] = useState("anime");
   const [randomAnime, setRandomAnime] = useState([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [noData, setNoData] = useState(false);
+
+  // Search
+  const [err, setErr] = useState("");
+  const [loadingSearch, setLoadingSearch] = useState();
+  const [searchAnime, setSearchAnime] = useState();
+  let [searchParams, setSearchParams] = useSearchParams();
+  let param = searchParams.get(`${search}`);
+  const debouncedSearchTerm = useDebounce(param, 500);
+
+  // console.log("data", searchAnime);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const v = e.target.value;
+    if (v && search === "anime") {
+      setSearchParams({ anime: v });
+    } else if (v && search === "character") {
+      setSearchParams({ character: v });
+    } else {
+      setSearchParams({});
+    }
+  };
+
   useEffect(() => {
     loadUserList(page);
-  }, []);
+    let abortController = new AbortController();
+    if (debouncedSearchTerm) {
+      setLoadingSearch(true);
+      if (!abortController.signal.aborted) {
+        setTimeout(() => {
+          AnimeService.getAnime(debouncedSearchTerm, `${search}`)
+            .then((data) => setSearchAnime(data))
+            .catch((error) => setErr(`${error}`))
+            .finally(() => {
+              setLoadingSearch(false);
+            });
+        }, 500);
+      }
+    } else {
+      setLoadingSearch(false);
+    }
+    return () => {
+      abortController.abort();
+    };
+  }, [debouncedSearchTerm]);
 
   const loadUserList = (page) => {
     setLoading(true);
@@ -56,6 +96,21 @@ const Home = () => {
     }
   };
 
+  // Trending Anime
+  const {
+    res: trendingAnime,
+    isPending: trendingPending,
+    error: trendingErr,
+  } = useFetch(`${process.env.REACT_APP_API_URL_ANIME}/trending/anime`);
+
+  // Popularity Anime
+  const {
+    res: popularityAnime,
+    isPending: popularityPending,
+    error: popularityErr,
+  } = useFetch(
+    `${process.env.REACT_APP_API_URL_ANIME}/anime?sort=popularityRank`
+  );
   // useEffect(() => {
   //   const { res, isPending, error } = useInfinity(
   //     `${process.env.REACT_APP_API_URL_ANIME}/anime?page[limit]=20&page[offset]=0`
@@ -65,13 +120,6 @@ const Home = () => {
   // const [pending, setPending] = useState(false);
 
   // const [err, setErr] = useState("");
-
-  const {
-    res: trendingAnime,
-    isPending: trendingPending,
-    error: trendingErr,
-  } = useFetch(`${process.env.REACT_APP_API_URL_ANIME}/trending/anime`);
-  console.log(trendingAnime);
 
   // console.log(res);
 
@@ -124,163 +172,68 @@ const Home = () => {
   //   // }
   // };
 
-  console.log(randomAnime);
+  // console.log(randomAnime);
 
-  // const {
-  //   res: popularityAnime,
-  //   isPending: popularityPending,
-  //   error: popularityErr,
-  // } = useFetch(
-  //   `${process.env.REACT_APP_API_URL_ANIME}/anime?sort=popularityRank`
-  // );
-  // console.log(popularityAnime);
-
-  // const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
-  const currentYear = new Date().getFullYear();
-
-  // useEffect(() => {
-  //   if (debouncedSearchTerm && trending) {
-  //     setFilteredGames(
-  //       trending.filter((anime) =>
-  //         anime.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-  //       )
-  //     );
-  //   }
-  // }, [debouncedSearchTerm, trending]);
   return (
     <>
-      {/* <section>
-        <div className={styles.card_title}>
-          <h1 className={styles.title}>Top 10 Trending Anime {currentYear}!</h1>
+      <div className={styles.games_content}>
+        <div className={styles.card_input}>
+          <form className={styles.form}>
+            <label>
+              <BiSearch className={styles.search_icon} />
+              <input
+                value={param || ""}
+                onChange={handleSearch}
+                type="search"
+                placeholder={`Search for ${search}`}
+                className={styles.input}
+              />
+            </label>
+          </form>
+          <div className={styles.filter}>
+            <select
+              id="category"
+              onChange={(e) => setSearch(e.target.value)}
+              defaultValue={`${search}`}
+            >
+              <option value="anime">Anime</option>
+              <option value="character">Character</option>
+            </select>
+          </div>
         </div>
-        <form className={styles.form}>
-          <label>
-            <BiSearch className={styles.search_icon} />
-            <input
-              onChange={(e) => setSearchTerm(e.target.value)}
-              type="search"
-              placeholder="Search for Title"
-              className={styles.input}
-            />
-          </label>
-        </form>
-        {debouncedSearchTerm && filteredGames.length === 0 && (
+      </div>
+      {/* {debouncedSearchTerm && filteredGames.length === 0 && (
           <p className="text-center">Sorry, no games found :(</p>
-        )}
-      </section> */}
-      <section className={styles.games_content}>
-        <div className={styles.card_title}>
-          <h1 className={styles.title}>Top 10 Trending Anime {currentYear}!</h1>
-        </div>
-        {trendingPending && <Spinner />}
-        {trendingErr && <p>{trendingErr}</p>}
-        <Swiper
-          navigation={true}
-          effect={"coverflow"}
-          autoplay={{
-            delay: 3000,
-          }}
-          // grabCursor={true}
-          slidesPerView={1}
-          // spaceBetween={10}
-          // breakpoints={{
-          //   640: {
-          //     slidesPerView: 1,
-          //     spaceBetween: 5,
-          //   },
-          //   768: {
-          //     slidesPerView: 2,
-          //     spaceBetween: 15,
-          //   },
-          //   1024: {
-          //     slidesPerView: ,
-          //     spaceBetween: 20,
-          //   },
-          // }}
-          // centeredSlides={true}
-          // slidesPerView={"auto"}
-          // coverflowEffect={{
-          //   rotate: 50,
-          //   stretch: 0,
-          //   depth: 100,
-          //   modifier: 1,
-          //   slideShadows: false,
-          // }}
-          // pagination={true}
-          className="mySwiper"
-        >
-          {trendingAnime &&
-            trendingAnime.data.map((anime) => (
-              <SwiperSlide key={anime.id}>
-                <TrendingItem anime={anime} />
-              </SwiperSlide>
-            ))}
-        </Swiper>
-      </section>
-      {/* <section className={styles.games_content}>
-        <div className={styles.card_title}>
-          <h1 className={styles.title}>
-            Top 10 Popularity Anime {currentYear}!
-          </h1>
-        </div>
-        {popularityPending && <Spinner />}
-        {popularityErr && <p>{popularityErr}</p>}
-        <Swiper
-          navigation={true}
-          effect={"coverflow"}
-          autoplay={{
-            delay: 3000,
-          }}
-          // grabCursor={true}
-          slidesPerView={1}
-          spaceBetween={10}
-          breakpoints={{
-            640: {
-              slidesPerView: 1,
-              spaceBetween: 5,
-            },
-            768: {
-              slidesPerView: 2,
-              spaceBetween: 15,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 20,
-            },
-          }}
-          // centeredSlides={true}
-          // slidesPerView={"auto"}
-          // coverflowEffect={{
-          //   rotate: 50,
-          //   stretch: 0,
-          //   depth: 100,
-          //   modifier: 1,
-          //   slideShadows: false,
-          // }}
-          // pagination={true}
-          className="mySwiper"
-        >
-          {popularityAnime &&
-            popularityAnime.data.map((popularity) => (
-              <SwiperSlide key={popularity.id}>
-                <PopularityItem anime={popularity} />
-              </SwiperSlide>
-            ))}
-        </Swiper>
-      </section> */}
+        )} */}
 
-      <section className={styles.games_content}>
-        <div className={styles.card_title}>
-          <h1 className={styles.title}>List Anime {currentYear}!</h1>
-        </div>
-        {/* <p>Sedang Membuat Quotes</p> */}
-        {randomAnime && <RandomList items={randomAnime} />}
-        <button onClick={() => moreAnime()}>Show more</button>
-        <p>Problem Infinity Scrool</p>
-        {loading && <Spinner />}
-        {noData && <div className="text-center">no data anymore ...</div>}
-      </section>
+      {loadingSearch && <Spinner />}
+      {err && <p>{err}</p>}
+      {searchAnime && <RandomList items={searchAnime.data} />}
+
+      {trendingAnime && (
+        <Trending
+          trendingAnime={trendingAnime}
+          trendingErr={trendingErr}
+          trendingPending={trendingPending}
+        />
+      )}
+
+      {popularityAnime && (
+        <Popularity
+          popularityAnime={popularityAnime}
+          popularityErr={popularityErr}
+          popularityPending={popularityPending}
+        />
+      )}
+
+      {randomAnime && (
+        <Random
+          randomAnime={randomAnime}
+          loading={loading}
+          noData={noData}
+          moreAnime={moreAnime}
+        />
+      )}
     </>
   );
 };

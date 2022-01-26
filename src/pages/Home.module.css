@@ -1,6 +1,17 @@
+.card_input {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-direction: row;
+  margin: 3rem 0 10rem;
+  gap: 2rem;
+  justify-content: center;
+}
 .form {
-  max-width: 40rem;
-  margin: 3rem auto;
+  min-width: 40rem;
+  /* position: relative; */
+  /* display: flex; */
+  /* margin: 3rem auto; */
 }
 
 .form label {
@@ -49,8 +60,8 @@
 }
 
 .games_content {
-  /* overflow: hidden; */
-  margin: 5rem 0;
+  overflow: hidden;
+  margin: 14rem 0 5rem;
 }
 
 .card_title {
@@ -60,4 +71,33 @@
 .title {
   text-align: start;
   font-size: 3rem;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+}
+
+.filter label {
+  display: inline-block;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.filter select {
+  display: block;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 1.4rem;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 1.5rem;
+  background: #32383e;
+  color: #ccc;
+  box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.12);
+}
+
+.filter option {
+  font-size: 1.5rem;
 }

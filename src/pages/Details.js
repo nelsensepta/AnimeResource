@@ -1,71 +1,85 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { AiFillHeart, AiFillWindows } from "react-icons/ai";
 import { GoBrowser } from "react-icons/go";
 import { useFetch } from "../hooks/useFetch";
 import { FavoritesContext } from "../context/FavoritesContext";
 import parse from "html-react-parser";
+import AnimeService from "../services/AnimeService";
 
 // styles
 import styles from "./Details.module.css";
 import Spinner from "../components/ui/Spinner";
 // import Layout from "../components/layout/Layout";
 import { Year } from "../lib/Lib";
+import Genres from "../components/genres/Genres";
 
 const Details = () => {
   const { slug } = useParams();
-  const [genres, setGenres] = useState([]);
-  // const [pendingGenres, setPendingGenres] = useState(false);
-  // const [err, setErr] = useState("");
-  console.log(genres);
-  // console.log(pendingGenres);
+  // const [genres, setGenres] = useState();
+
+  // console.log(genres);
 
   const {
     res: anime,
     isPending: animePending,
     error: animeErr,
   } = useFetch(
-    `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[slug]=${slug}`
+    `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[slug]=${slug}&include=categories,characters`
   );
 
-  try {
-    fetch(`${anime.data[0].relationships.categories.links.related}`)
-      .then((resJson) => resJson.json())
-      .then((res) => genres.length === 0 && setGenres(res.data));
-  } catch (error) {
-    // // setPendingGenres(!pendingGenres);
-    // console.log(error)
-    return <p>ok</p>;
-    // setErr(error);
-  }
-
-  // const cek = async () => {
-  //   try {
-  //     if (animePending === false) return console.log(genreAnime);
-  //   } catch (error) {
-  //     return alert(animePending);
-  //   }
-  // };
-
-  // cek();
-
-  // const {
-  //   res: genreAnime,
-  //   isPending: genreAnimePending,
-  //   error: genreAnimeErr,
-  // } = useFetch(`${anime.data[0].relationships.categories.links.related}`);
-  // console.log(genreAnime);
-  // console.log(genreAnimeErr);
-  // console.log(genreAnimePending);
-
-  // const { anime } = data.data;
   // console.log(anime);
-  // console.log(anime.data[0].attributes.coverImage.meta.dimensions.height);
-  // const anime = data;
-  // console.log(anime.data[0]);
+  const ok =
+    "https://kitsu.io/api/edge/castings?filter[media_type]=Anime&filter[media_id]=7442&filter[is_character]=true&filter[language]=Japanese&include=character,person&sort=-featured";
+
+  // console.log(animePending);
+  // console.log(anime);
+  // if (animePending === false && anime !== null) {
+  //   console.log("ok");
+  //   console.log(anime.data[0].relationships.categories.links.related);
+  // }
+  // console.log(detail);
+
+  // try {
+  //   fetch(anime.data[0].relationships.categories.links.related)
+  //     .then((res) => res.json())
+  //     .then((resJson) => console.log(resJson));
+  // } catch (error) {
+  //   // setErr(`${error}`);
+  //   // throw error;
+  //   console.log("ok");
+  // }
+
+  // useEffect(() => {
+  //   let abortController = new AbortController();
+  //   if (anime !== null && animePending === false) {
+  //     console.log("Masuk");
+  //     console.log(anime.data[0]);
+  //     setLoading(true);
+  //     if (!abortController.signal.aborted) {
+  //       setTimeout(() => {
+  //         AnimeService.getGenres(
+  //           // "https://kitsu.io/api/edge/anime/44081/categories"
+  //           anime.data[0].relationships.categories.links.related
+  //         )
+  //           .then((data) => setGenres(data))
+  //           .catch((error) => setErr(`${error}`))
+  //           .finally(() => {
+  //             setLoading(false);
+  //           });
+  //       }, 500);
+  //     }
+  //   } else {
+  //     setLoading(false);
+  //   }
+  //   return () => {
+  //     abortController.abort();
+  //   };
+  // }, [genres]);
 
   // const { gameIsFavorite, addToFavorite } = useContext(FavoritesContext);
 
+  // console.log(anime.data[0].attributes.youtubeVideoId);
   return (
     <section className={styles.detail}>
       {animePending && <Spinner />}
@@ -75,10 +89,15 @@ const Details = () => {
           <div className={styles.wrapper_thumb}>
             <img
               className={styles.thumbnail}
-              src={anime.data[0].attributes.coverImage.original}
+              src={
+                anime.data[0].attributes.coverImage &&
+                anime.data[0].attributes.coverImage.original
+              }
               alt={anime.data[0].attributes.titles.en}
               style={{
-                height: `${anime.data[0].attributes.coverImage.meta.dimensions.small.height}px`,
+                height: anime.data[0].attributes.coverImage
+                  ? `${anime.data[0].attributes.coverImage.meta.dimensions.small.height}px`
+                  : "800px",
               }}
             />
           </div>
@@ -94,11 +113,31 @@ const Details = () => {
                 {anime.data[0].attributes.ageRatingGuide} |{" "}
                 {Year(anime.data[0].attributes.startDate)}
               </span>
-              {/* {pendingGenres && <Spinner />} */}
-              {/* {genreAnimeErr && <p>{genreAnimeErr}</p>} */}
+              {/* <p>Propblem Pending Oke Genres</p> */}
+              {/* <Genres
+                genres={anime.data[0].relationships.categories.links.related}
+              /> */}
+              {/* <div className={styles.genres}>
+                {anime.included.map((genre) => (
+                  <a
+                    key={genre.id}
+                    href={`/anime/genre/${genre.attributes.slug}`}
+                    className={styles.genre}
+                  >
+                    {genre.attributes.title}
+                  </a>
+                ))}
+                
+              </div> */}
+              {/* <span>
+                {" "}
+                {anime.data[0].relationships.categories.links.related}{" "}
+              </span> */}
+              {/* <span>Start Date{anime.data[0].attributes.startDate}</span> */}
               <div className={styles.genres}>
-                {genres &&
-                  genres.map((genre) => (
+                {anime.included
+                  .filter((relasi) => relasi.type === "categories")
+                  .map((genre) => (
                     <a
                       key={genre.id}
                       href={`/anime/genre/${genre.attributes.slug}`}
@@ -108,12 +147,30 @@ const Details = () => {
                     </a>
                   ))}
               </div>
-              {/* <span>
-                {" "}
-                {anime.data[0].relationships.categories.links.related}{" "}
-              </span> */}
-              {/* <span>Start Date{anime.data[0].attributes.startDate}</span> */}
+
+              {/* {pendingGenres && <Spinner />}
+              {genreAnimeErr && <p>{genreAnimeErr}</p>} */}
+              {/* <p>{anime.data[0].relationships.categories.links.related}</p> */}
+
+              <iframe
+                width="420"
+                height="315"
+                src={`https://www.youtube.com/embed/${anime.data[0].attributes.youtubeVideoId}`}
+              ></iframe>
               <article>{anime.data[0].attributes.description}</article>
+              <div className={styles.genres}>
+                {anime.included
+                  .filter((relasi) => relasi.type === "mediaCharacters")
+                  .map((kederCuk) => (
+                    <a
+                      key={kederCuk.id}
+                      href={`/anime/genre/${kederCuk.attributes.role}`}
+                      className={styles.genre}
+                    >
+                      {kederCuk.relationships.character.links.related}
+                    </a>
+                  ))}
+              </div>
             </div>
           </div>
         </>

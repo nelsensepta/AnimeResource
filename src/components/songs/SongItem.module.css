@@ -1,7 +1,7 @@
 .card {
   background: #32383e;
   border-radius: 5px;
-  overflow-x: hidden;
+  overflow: hidden;
   box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.1);
 }
 
@@ -12,29 +12,10 @@
   overflow: hidden;
 }
 
-/* .card_audio {
-  width: 66%;
-  height: auto;
-  padding: 20px;
+.card_audio {
   align-items: start;
-  border-radius: 5px;
-  background-color: #eee;
-  color: #444;
-  margin: 20px auto;
+  margin-top: 20px;
   overflow: hidden;
-} */
-.card_audio audio {
-  -webkit-transition: all 0.5s linear;
-  -moz-transition: all 0.5s linear;
-  -o-transition: all 0.5s linear;
-  transition: all 0.5s linear;
-  -moz-box-shadow: 2px 2px 4px 0px #006773;
-  -webkit-box-shadow: 2px 2px 4px 0px #006773;
-  box-shadow: 2px 2px 4px 0px #006773;
-  -moz-border-radius: 7px 7px 7px 7px;
-  -webkit-border-radius: 7px 7px 7px 7px;
-  border-radius: 7px 7px 7px 7px;
-  /* width: 400px; */
 }
 
 @supports (aspect-ratio: 16 / 10) {
@@ -54,10 +35,28 @@
   padding: 2rem;
 }
 
+.card_body p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  margin-top: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .title {
   color: #aaaaaa;
   font-size: 2rem;
   font-weight: 600;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .title:hover {
@@ -78,8 +77,9 @@
 }
 
 .card_footer {
-  margin-top: 3rem;
+  margin-top: 20px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -117,7 +117,7 @@
 
 .heart_icon {
   color: #aaaaaa;
-  font-size: 2rem;
+  font-size: 2.3rem;
 }
 
 .heart_icon:hover {

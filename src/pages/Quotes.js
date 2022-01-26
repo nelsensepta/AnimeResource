@@ -14,20 +14,26 @@ import AnimeService from "../services/AnimeService";
 const Quotes = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredQuotes, setFilteredQuotes] = useState([]);
-  const [allAnime, setAllAnime] = useState([]);
+  const [search, setSearch] = useState("character");
+  const [filteredQuotes, setFilteredQuotes] = useState();
+  // const [allAnime, setAllAnime] = useState([]);
   const [loading, setLoading] = useState();
   const [err, setErr] = useState("");
 
   let [searchParams, setSearchParams] = useSearchParams();
-  let param = searchParams.get("anime");
+  let param = searchParams.get(`${search}`);
+  const debouncedSearchTerm = useDebounce(param, 500);
   // console.log(searchParams);
-  console.log(param);
+  // console.log(param);
+  // console.log(filteredQuotes);
 
   const handleSearch = (e) => {
-    const anime = e.target.value;
-    if (anime) {
-      setSearchParams({ anime });
+    e.preventDefault();
+    const v = e.target.value;
+    if (v && search === "character") {
+      setSearchParams({ character: v });
+    } else if (v && search === "anime") {
+      setSearchParams({ anime: v });
     } else {
       setSearchParams({});
     }
@@ -35,39 +41,28 @@ const Quotes = () => {
 
   useEffect(() => {
     let abortController = new AbortController();
-    // async function getFox() {
-    //   const url = "https://aaa";
-    //   const res = await fetch(url);
-    //   const jsonRes = await res.json();
-    //   return jsonRes;
-    // }
-    // getFox()
-    //   // .then((fox) => console.log(fox.image))
-    //   .catch((reason) => console.log(reason.toString()));
-    // async function getGitHubUser() {
-    //   let response = await fetch(`https://api.github.com/users/${user}`, {
-    //     signal: abortController.signal,
-    //   });
-    //   if (!abortController.signal.aborted) {
-    //     let data = await response.json();
-    //     setUserData(data);
-    //   }
-    // }
-    if (param) {
+    if (debouncedSearchTerm) {
       setLoading(true);
       if (!abortController.signal.aborted) {
-        AnimeService.getQuotes(param, "anime")
-          .then((data) => (console.log(data), setLoading(false)))
-          .catch(() => setErr(`Batas 100 Per Jam`), setLoading(false));
+        setTimeout(() => {
+          AnimeService.getQuotes(debouncedSearchTerm, `${search}`)
+            .then((data) => setFilteredQuotes(data))
+            .catch((error) => setErr(`${error}`))
+            .finally(() => {
+              setLoading(false);
+            });
+        }, 500);
       }
+    } else {
+      setLoading(false);
     }
     return () => {
       abortController.abort();
     };
-  }, [param]);
+  }, [debouncedSearchTerm]);
 
   // console.log(!allAnime.length);
-  console.log(allAnime);
+  // console.log(allAnime);
   console.log(err);
   // let url = `${process.env.REACT_APP_API_URL_QUETOS}/random`;
   // setAllAnime(
@@ -86,7 +81,7 @@ const Quotes = () => {
   // console.log(allAnime);
   // console.log(availableAnime);
 
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  // const debouncedSearchTerm = useDebounce(searchTerm, 500);
   // console.log(debouncedSearchTerm);
 
   // const currentYear = new Date().getFullYear();
@@ -144,6 +139,7 @@ const Quotes = () => {
   //   "Fighting",
   // ];
 
+  // console.log(Array.isArray(filteredQuotes));
   return (
     <section className={styles.content}>
       {/* <h1 className="title">
@@ -156,28 +152,46 @@ const Quotes = () => {
       <div className={styles.card_title}>
         <h1 className={styles.title}>Single Anime Quotes</h1>
       </div>
-      <form className={stylesHome.form}>
-        <label>
-          <BiSearch className={stylesHome.search_icon} />
-          <input
-            value={param || ""}
-            onChange={handleSearch}
-            type="search"
-            placeholder="Search for Anime, Character"
-            className={stylesHome.input}
-          />
-        </label>
-      </form>
+      <div className={stylesHome.card_input}>
+        <form className={stylesHome.form}>
+          <label>
+            <BiSearch className={stylesHome.search_icon} />
+            <input
+              value={param || ""}
+              onChange={handleSearch}
+              type="search"
+              placeholder={`Search for ${search}`}
+              className={stylesHome.input}
+            />
+          </label>
+        </form>
+        <div className={styles.filter}>
+          <select
+            id="category"
+            onChange={(e) => setSearch(e.target.value)}
+            defaultValue={`${search}`}
+          >
+            <option value="character">Character</option>
+            <option value="anime">Anime</option>
+          </select>
+        </div>
+      </div>
       {/* {allAnime ? (
         <QuoteList items={allAnime} />
       ) : (
         // <QuoteSingle item={single} />
         <p>ok</p>
       )} */}
-      <p>{allAnime.error}</p>
-      {loading && <Spinner />}
       {err && <p>{err}</p>}
-      <p>Lebih Baik Menggunakan Avaible Anime</p>
+      {/* {loading &&
+        Array(9)
+          .fill()
+          .map((item, index) => <Card key={index} />)} */}
+
+      {!err && filteredQuotes && <QuoteList items={filteredQuotes} />}
+      {/* <p>{allAnime.error}</p> */}
+      {loading && <Spinner />}
+      {/* {err && <p>{err}</p>} */}
       {/* {allAnime.length !== 0 && <QuoteList items={allAnime} />} */}
     </section>
   );

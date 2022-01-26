@@ -1,51 +1,75 @@
-import { useContext } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaSpotify, FaHeart } from "react-icons/fa";
+import { FaSpotify, FaHeart, FaPlay, FaPause } from "react-icons/fa";
 import { GoBrowser } from "react-icons/go";
-import Genre from "../genres";
-import { convertMinute } from "../../lib/Lib";
+import { convertMinute, RandomString } from "../../lib/Lib";
 import { useTranslation } from "react-i18next";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 // styles
 import styles from "./SongItem.module.css";
 
 import { FavoritesContext } from "../../context/FavoritesContext";
 
-const GameItem = ({ item: song }) => {
+const GameItem = (props) => {
+  // console.log(props.item.id !== props.item.id);
   const { addToFavorite, gameIsFavorite } = useContext(FavoritesContext);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioElement = useRef(null);
+
+  // console.log(props.audio);
+
+  useEffect(() => {
+    if (isPlaying) {
+      audioElement.current.play();
+    } else {
+      audioElement.current.pause();
+    }
+  });
+  // console.log(props.item.album);
+
+  // const contohId = [1,2,3,4,5,6]
+  // const contohPlay = false
+  // console.log(contohId.map((id)))
   // console.log(song.duration);
   // console.log(convertMinute(6000));
   // const { t } = useTranslation();
+  // console.log(props);
 
   return (
     <div className={styles.card}>
       <div className={styles.card_body}>
-        <Link to={`/song/${song.is}`} className={styles.title}>
-          {song.title}
+        <Link to={`/song/${props.item.duration}`} className={styles.title}>
+          {props.item.title}
         </Link>
-        <p>{convertMinute(song.duration)}</p>
-        <p>{song.artist}</p>
-        <p>{song.albun}</p>
-        {/* <div className={styles.card_audio}>
-          <audio controls src={`${song.preview_url}`}>
-            <source src={`${song.preview_url}`} type="audio/mp3" />
-            Your browser dose not Support the audio Tag
-          </audio>
-        </div> */}
+        {/* <Skeleton /> */}
+        <p>{convertMinute(props.item.duration)}</p>
+        <p>{props.item.artist}</p>
+        <p>{props.item.album}</p>
+        <div className={styles.card_audio}>
+          <audio ref={audioElement} src={`${props.item.preview_url}`} />
+          <button onClick={() => setIsPlaying(!isPlaying)}>
+            {isPlaying ? (
+              <FaPause className={styles.heart_icon} />
+            ) : (
+              <FaPlay className={styles.heart_icon} />
+            )}
+          </button>
+        </div>
         <div className={styles.card_footer}>
           <a
-            href={`${song.local_spotify_url}`}
+            href={`${props.item.local_spotify_url}`}
             target="_blank"
             className={styles.title}
           >
             <FaSpotify className={styles.heart_icon} />
           </a>
-
           <button
-            onClick={() => addToFavorite(song)}
+            onClick={() => addToFavorite(props.item)}
             className={styles.btn}
             title={
-              gameIsFavorite(song.id)
+              gameIsFavorite(props.item.id)
                 ? "Remove from favorites"
                 : "Add to favorites"
             }
@@ -53,7 +77,7 @@ const GameItem = ({ item: song }) => {
             <FaHeart
               className={styles.heart_icon}
               style={{
-                color: gameIsFavorite(song.id) ? "red" : "#aaaaaa",
+                color: gameIsFavorite(props.item.id) ? "red" : "#aaaaaa",
               }}
             />
           </button>

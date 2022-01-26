@@ -1,0 +1,102 @@
+:root {
+  --bg-color: rgb(118, 136, 218);
+  --line-color: rgb(85, 63, 184);
+  --line-color-sec: rgb(109, 102, 201);
+  --line-avatar: rgb(109, 100, 131);
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background-color: wheat; */
+}
+
+.post {
+  width: 220px;
+  height: 100px;
+  /* box-shadow: 0px 0px 23px 0px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 0px 23px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 23px 0px rgba(0, 0, 0, 0.75); */
+  box-shadow: 0px 0px 23px 0px rgba(225, 225, 225, 0.75);
+  -webkit-box-shadow: 0px 0px 23px 0px rgba(225, 225, 225, 0.75);
+  -moz-box-shadow: 0px 0px 23px 0px rgba(225, 225, 225, 0.75);
+  background-color: var(--bg-color);
+  border-radius: 5px;
+  padding: 1rem;
+}
+.post .avatar {
+  float: left;
+  width: 52px;
+  height: 52px;
+  /* background-color: #ccc; */
+  background-color: var(--line-avatar);
+  border-radius: 25%;
+  /* margin: 8px; */
+  margin-top: 10px;
+  margin-right: 5px;
+  /* background-image: linear-gradient(
+    90deg,
+    #f4f4f4 0px,
+    rgba(229, 229, 229, 0.8) 40px,
+    #f4f4f4 80px
+  ); */
+  background-image: linear-gradient(
+    90deg,
+    var(--line-color) 0px,
+    var(--line-color-sec) 40px,
+    var(--line-color) 80px
+  );
+  background-size: 600px;
+  animation: shine-avatar 2s infinite ease-out;
+}
+.post .line {
+  float: left;
+  width: 140px;
+  height: 16px;
+  margin-top: 10px;
+  border-radius: 7px;
+  /* background-image: linear-gradient(
+    90deg,
+    #f4f4f4 0px,
+    rgba(229, 229, 229, 0.8) 40px,
+    #f4f4f4 80px
+  ); */
+  background-image: linear-gradient(
+    90deg,
+    var(--line-color) 0px,
+    var(--line-color-sec) 40px,
+    var(--line-color) 80px
+  );
+  background-size: 600px;
+  animation: shine-lines 1.5s infinite ease-out;
+}
+.post .avatar + .line {
+  margin-top: 10px;
+  width: 100px;
+}
+.post .line ~ .line {
+  /* background-color: #ddd; */
+  background-color: rgb(196, 24, 24);
+}
+
+@keyframes shine-lines {
+  0% {
+    background-position: -100px;
+  }
+  40%,
+  100% {
+    background-position: 140px;
+  }
+}
+@keyframes shine-avatar {
+  0% {
+    background-position: -32px;
+  }
+  40%,
+  100% {
+    background-position: 208px;
+  }
+}

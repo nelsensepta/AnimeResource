@@ -1,15 +1,21 @@
 // styles
 // import styles from "./GameList.module.css";
 // import QuoteItem from "./QuoteItem";
-import "swiper/swiper-bundle.min.css";
-import "swiper/swiper.min.css";
+// import "swiper/swiper-bundle.min.css";
+// import "swiper/swiper.min.css";
+import styles from "./QuotesSingle.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Autoplay, EffectCoverflow, Navigation } from "swiper";
+import SwiperCore, {
+  Autoplay,
+  EffectCoverflow,
+  Navigation,
+  Pagination,
+} from "swiper";
 import QuoteSingle from "./QuoteSingle";
 import Spinner from "../ui/Spinner";
-SwiperCore.use([Autoplay, Navigation]);
+SwiperCore.use([Autoplay, Navigation, Pagination]);
 const QuoteList = ({ items }) => {
-  console.log(items);
+  // console.log(items);
   return (
     // <div className="bg-gray-400">
     //   {items.data.map((quote) => (
@@ -17,29 +23,30 @@ const QuoteList = ({ items }) => {
     //   ))}
     // </div>
     <Swiper
-      navigation={true}
+      // navigation={true}
       effect={"coverflow"}
-      autoplay={{
-        delay: 3000,
-      }}
+      // autoplay={{
+      //   delay: 3000,
+      // }}
       // grabCursor={true}
       slidesPerView={1}
-      spaceBetween={10}
-      breakpoints={{
-        640: {
-          slidesPerView: 1,
-          spaceBetween: 5,
-        },
-        768: {
-          slidesPerView: 2,
-          spaceBetween: 15,
-        },
-        1024: {
-          slidesPerView: 3,
-          spaceBetween: 20,
-        },
-      }}
-      // centeredSlides={true}
+      // spaceBetween={50}
+      // breakpoints={{
+      //   640: {
+      //     slidesPerView: 1,
+      //     spaceBetween: 5,
+      //   },
+      //   768: {
+      //     slidesPerView: 2,
+      //     spaceBetween: 15,
+      //   },
+      //   1024: {
+      //     slidesPerView: 3,
+      //     spaceBetween: 20,
+      //   },
+      // }}
+      centeredSlides={true}
+      // autoHeight={true}
       // slidesPerView={"auto"}
       // coverflowEffect={{
       //   rotate: 50,
@@ -48,15 +55,20 @@ const QuoteList = ({ items }) => {
       //   modifier: 1,
       //   slideShadows: false,
       // }}
-      // pagination={true}
+
+      pagination={{
+        clickable: true,
+        dynamicBullets: true,
+      }}
       className="mySwiper"
     >
-      {items &&
-        items.map((item, i) => (
-          <SwiperSlide key={i}>
+      {items.map((item, i) => (
+        <SwiperSlide key={i}>
+          <div className={styles.content}>
             <QuoteSingle item={item} />
-          </SwiperSlide>
-        ))}
+          </div>
+        </SwiperSlide>
+      ))}
       {/* <p>ok</p> */}
     </Swiper>
   );

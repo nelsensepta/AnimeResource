@@ -5,7 +5,7 @@ import RandomItem from "./RandomItem";
 // import { useState, useEffect } from "react";
 
 const RandomList = ({ items }) => {
-  console.log(items);
+  // console.log(items);
   return (
     <div className={styles.grid}>
       {items.map((anime) => (
