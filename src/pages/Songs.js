@@ -28,12 +28,10 @@ const Songs = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   let param = searchParams.get(`${search}`);
 
-  // console.log(searchSongs);
   const debouncedSearchTerm = useDebounce(param, 500);
-  // console.log(debouncedSearchTerm);
+
   const handleSearch = (e) => {
     e.preventDefault();
-    // console.log("1", loading);
     const v = e.target.value;
     if (v && search === "title") {
       setSearchParams({ title: v });
@@ -44,7 +42,6 @@ const Songs = () => {
     }
   };
 
-  // console.log(param);
   useEffect(() => {
     let abortController = new AbortController();
     if (debouncedSearchTerm) {
@@ -57,7 +54,6 @@ const Songs = () => {
             .finally(() => {
               setLoading(false);
             });
-          // console.log("2", loading);
         }, 500);
       }
     } else {
@@ -68,47 +64,14 @@ const Songs = () => {
     };
   }, [debouncedSearchTerm]);
 
-  // console.log(loading);
-
-  // console.log(loading);
   let url = `${process.env.REACT_APP_API_URL_SONGS}/random/song/20`;
   const { res, isPending, error } = useFetch(url);
-
-  // if (selectedCategory) {
-  //   url = `${process.env.REACT_APP_API_URL_ANIME}/v1/song?sort-by=popularity&category=${selectedCategory}`;
-  // }
-
-  // const { data, isPending, error } = useFetch(url);
-
-  // const categories = [
-  //   "MMO",
-  //   "MMORPG",
-  //   "Shooter",
-  //   "Strategy",
-  //   "Moba",
-  //   "Card Games",
-  //   "Racing",
-  //   "Sports",
-  //   "Social",
-  //   "Fighting",
-  // ];
 
   return (
     <section className={styles.content}>
       <div className={styles.card_title}>
-        <h1 className={styles.title}>List Songs Anime 2022</h1>
-        {/* <button onClick={() => handleClick("en")}>English</button>
-        <button onClick={() => handleClick("jp")}>Japan</button>
-        <button onClick={() => handleClick("id")}>Indonesia</button> */}
+        <h1 className={styles.title}>List Songs Anime 2022!</h1>
       </div>
-      {/* <h1 className="title">
-        Top 10 Free{" "}
-        <span className={styles.lead}>
-          {selectedCategory ? selectedCategory : "To Play"}
-        </span>{" "}
-        Games for PC and Browser in {currentMonth} {currentYear}
-      </h1> */}
-
       <div className={stylesHome.card_input}>
         <form className={stylesHome.form}>
           <label>
@@ -133,7 +96,6 @@ const Songs = () => {
           </select>
         </div>
       </div>
-
       {err && <p>{err}</p>}
       {loading &&
         Array(9)

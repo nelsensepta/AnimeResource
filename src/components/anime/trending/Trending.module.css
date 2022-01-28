@@ -1,13 +1,13 @@
-/* .games_content {
-  overflow: hidden;
-  margin: 5rem 0;
+.content {
+  /* overflow: hidden; */
+  margin-top: 5rem;
 }
 
 .card_title {
-  margin: 11rem 0 3rem;
+  margin-bottom: 2rem;
 }
 
 .title {
   text-align: start;
   font-size: 3rem;
-} */
+}

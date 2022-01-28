@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import {
-  IoGameController,
+  IoGrid,
   IoTrendingUp,
   IoHeart,
   IoMusicalNotesSharp,
@@ -11,7 +11,7 @@ import styles from "./BottomBar.module.css";
 
 const BottomBar = () => {
   const activeStyle = {
-    color: "#fff",
+    color: "rgb(54, 34, 100)",
   };
 
   return (
@@ -22,17 +22,8 @@ const BottomBar = () => {
             to="/"
             style={({ isActive }) => (isActive ? activeStyle : undefined)}
           >
-            <IoGameController className={styles.icon} />
+            <IoGrid className={styles.icon} />
             <span>Home</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/popular"
-            style={({ isActive }) => (isActive ? activeStyle : undefined)}
-          >
-            <IoTrendingUp className={styles.icon} />
-            <span>Popular</span>
           </NavLink>
         </li>
         <li>

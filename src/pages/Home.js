@@ -9,17 +9,10 @@ import { BiSearch } from "react-icons/bi";
 import styles from "./Home.module.css";
 import RandomList from "../components/anime/random/RandomList";
 import Spinner from "../components/ui/Spinner";
-import { RandomString } from "../lib/Lib";
-import TrendingList from "../components/anime/trending/TrendingList";
-import TrendingItem from "../components/anime/trending/TrendingItem";
-import PopularityItem from "../components/anime/popular/PopularityItem";
-import { useInfinity } from "../hooks/useInfinity";
 import Random from "../components/anime/random/Random";
 import Popularity from "../components/anime/popular/Popularity";
 import Trending from "../components/anime/trending/Trending";
 const Home = () => {
-  // const [filteredGames, setFilteredGames] = useState([]);
-  // const [searchTerm, setSearchTerm] = useState("");
   const [search, setSearch] = useState("anime");
   const [randomAnime, setRandomAnime] = useState([]);
   const [page, setPage] = useState(0);
@@ -34,7 +27,6 @@ const Home = () => {
   let param = searchParams.get(`${search}`);
   const debouncedSearchTerm = useDebounce(param, 500);
 
-  // console.log("data", searchAnime);
   const handleSearch = (e) => {
     e.preventDefault();
     const v = e.target.value;
@@ -109,8 +101,10 @@ const Home = () => {
     isPending: popularityPending,
     error: popularityErr,
   } = useFetch(
-    `${process.env.REACT_APP_API_URL_ANIME}/anime?sort=popularityRank`
+    `${process.env.REACT_APP_API_URL_ANIME}/anime?sort=popularityRank&include=categories`
   );
+
+  // console.log(popularityAnime);
   // useEffect(() => {
   //   const { res, isPending, error } = useInfinity(
   //     `${process.env.REACT_APP_API_URL_ANIME}/anime?page[limit]=20&page[offset]=0`
@@ -202,11 +196,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <p>Problem Include Okeh</p>
-      {/* {debouncedSearchTerm && filteredGames.length === 0 && (
-          <p className="text-center">Sorry, no games found :(</p>
-        )} */}
-
       {loadingSearch && <Spinner />}
       {err && <p>{err}</p>}
       {searchAnime && <RandomList items={searchAnime.data} />}

@@ -7,7 +7,7 @@
   /*
   --bg-footer: #1c1e22; */
   --bg-footer: #000000;
-  --bg-header: #0c1f3b;
+  --bg-header: #1b1d20;
 }
 
 * {
@@ -161,6 +161,11 @@ a {
 }
 
 /* Swiper */
+/* 
+.swiper-slide-active {
+  transition: 1s;
+  transform: scale(1.5);
+} */
 /* .swiper {
   width: 100%;
   height: 100%;
@@ -181,4 +186,21 @@ a {
   -ms-flex-align: center;
   -webkit-align-items: center;
   align-items: center;
+} */
+/* .swiper-wrapper {
+  overflow: visible;
+} */
+
+/* .swiper-container {
+  width: 100%;
+  padding-top: 150px;
+  padding-bottom: 50px;
+  overflow: visible;
+}
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 350px;
+  height: 350px;
 } */

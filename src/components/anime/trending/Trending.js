@@ -3,29 +3,24 @@ import "swiper/swiper-bundle.min.css";
 import "swiper/swiper.min.css";
 import SwiperCore, { Autoplay, Navigation } from "swiper";
 import TrendingItem from "./TrendingItem";
-import styles from "../../../pages/Home.module.css";
+import styles from "./Trending.module.css";
 import Spinner from "../../ui/Spinner";
 import { currentYear } from "../../../lib/Lib";
 SwiperCore.use([Autoplay, Navigation]);
-const Trending = ({
-  trendingPending: pending,
-  trendingErr: err,
-  trendingAnime: dataAnime,
-}) => {
+const Trending = ({ trendingPending, trendingErr, trendingAnime }) => {
   return (
-    <div className={styles.games_content}>
+    <div className={styles.content}>
       <div className={styles.card_title}>
         <h1 className={styles.title}>Top 10 Trending Anime {currentYear()}!</h1>
       </div>
-      {pending && <Spinner />}
-      {err && <p>{err}</p>}
+      {trendingPending && <Spinner />}
+      {trendingErr && <p>{trendingErr}</p>}
       <Swiper
         navigation={true}
-        effect={"coverflow"}
         autoplay={{
           delay: 3000,
         }}
-        // grabCursor={true}
+        grabCursor={true}
         slidesPerView={1}
         spaceBetween={10}
         breakpoints={{
@@ -42,21 +37,12 @@ const Trending = ({
             spaceBetween: 20,
           },
         }}
-        // centeredSlides={true}
-        // slidesPerView={"auto"}
-        // coverflowEffect={{
-        //   rotate: 50,
-        //   stretch: 0,
-        //   depth: 100,
-        //   modifier: 1,
-        //   slideShadows: false,
-        // }}
-        // pagination={true}
+        loop={true}
         className="mySwiper"
       >
-        {!pending &&
-          dataAnime &&
-          dataAnime.data.map((anime) => (
+        {!trendingPending &&
+          trendingAnime &&
+          trendingAnime.data.map((anime) => (
             <SwiperSlide key={anime.id}>
               <TrendingItem anime={anime} />
             </SwiperSlide>

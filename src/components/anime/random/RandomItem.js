@@ -35,7 +35,7 @@ const RandomList = ({ item: anime }) => {
             </span>
             <span className={styles.rating}>
               {anime.attributes.averageRating} | {anime.attributes.showType} |{" "}
-              {Year(anime.attributes.startDate)}
+              {anime.attributes.startDate && Year(anime.attributes.startDate)}
             </span>
           </div>
           <button

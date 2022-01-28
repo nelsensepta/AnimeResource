@@ -55,8 +55,6 @@ const Details = () => {
   }, [details]);
 
   const fillPeopleOrChar = (data) => {
-    // console.log(data);
-
     return data
       ? data.filter(
           (v, i, a) =>
@@ -66,8 +64,6 @@ const Details = () => {
         )
       : undefined;
   };
-  console.log(char);
-  console.log(charErr);
 
   const loadCharList = (page) => {
     if (details) {
@@ -133,10 +129,6 @@ const Details = () => {
                 {details.data[0].attributes.ageRatingGuide} |{" "}
                 {Year(details.data[0].attributes.startDate)}
               </span>
-              {/* <p>Propblem Pending Oke Genres</p> */}
-              {/* <Genres
-                genres={details.data[0].relationships.categories.links.related}
-              /> */}
               <div className={styles.genres}>
                 {details.included.map((genre) => (
                   <a
@@ -151,20 +143,22 @@ const Details = () => {
               <article>{details.data[0].attributes.description}</article>
               <div className={styles.characters}>
                 {visibleChar && <Character char={fillPeopleOrChar(char)} />}
-                {loadingChar && <Spinner />}
                 {charErr ? (
                   <p>{charErr}</p>
                 ) : (
-                  <button
-                    className={styles.ok}
-                    onClick={
-                      !visibleChar
-                        ? () => setVisibleChar(true)
-                        : () => moreChar()
-                    }
-                  >
-                    Character
-                  </button>
+                  <div className={styles.btnWrapper}>
+                    <button
+                      className={styles.moreBtn}
+                      onClick={
+                        !visibleChar
+                          ? () => setVisibleChar(true)
+                          : () => moreChar()
+                      }
+                    >
+                      Character
+                    </button>
+                    {loadingChar && <Spinner />}
+                  </div>
                 )}
               </div>
             </div>

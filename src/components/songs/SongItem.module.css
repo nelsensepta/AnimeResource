@@ -4,6 +4,13 @@
   overflow: hidden;
   box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.1);
 }
+.card_body {
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* flex-direction: column; */
+}
 
 .card_header {
   display: block;
@@ -12,10 +19,35 @@
   overflow: hidden;
 }
 
+.card_data {
+  display: flex;
+  width: 70%;
+  flex-direction: column;
+  justify-self: start;
+  align-self: flex-start;
+}
+
 .card_audio {
-  align-items: start;
-  margin-top: 20px;
-  overflow: hidden;
+  width: 30%;
+  /* align-items: center; */
+  /* margin-top: 20px; */
+  /* display: flex;
+  justify-items: center; */
+  padding: 1.5rem;
+  /* overflow: hidden; */
+  border-radius: 50%;
+  background-color: rgba(35, 35, 56, 0.377);
+}
+
+.audio_res {
+  display: none;
+}
+.music_icon {
+  font-size: 3rem;
+  width: 100%;
+  align-self: center;
+  color: #1e2221;
+  z-index: 100;
 }
 
 @supports (aspect-ratio: 16 / 10) {
@@ -29,10 +61,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.card_body {
-  padding: 2rem;
 }
 
 .card_body p {
@@ -77,8 +105,9 @@
 }
 
 .card_footer {
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
+  padding: 1rem 2rem;
   align-items: center;
   justify-content: space-between;
 }

@@ -40,48 +40,54 @@ const GameItem = (props) => {
   return (
     <div className={styles.card}>
       <div className={styles.card_body}>
-        <Link to={`/song/${props.item.duration}`} className={styles.title}>
-          {props.item.title}
-        </Link>
-        {/* <Skeleton /> */}
-        <p>{convertMinute(props.item.duration)}</p>
-        <p>{props.item.artist}</p>
-        <p>{props.item.album}</p>
+        <div className={styles.card_data}>
+          <Link to={`/song/${props.item.duration}`} className={styles.title}>
+            {props.item.title}
+          </Link>
+          {/* <Skeleton /> */}
+          <p>{convertMinute(props.item.duration)}</p>
+          <p>{props.item.artist}</p>
+          <p>{props.item.album}</p>
+          <audio
+            ref={audioElement}
+            src={`${props.item.preview_url}`}
+            className={styles.audio_res}
+          />
+        </div>
         <div className={styles.card_audio}>
-          <audio ref={audioElement} src={`${props.item.preview_url}`} />
           <button onClick={() => setIsPlaying(!isPlaying)}>
             {isPlaying ? (
-              <FaPause className={styles.heart_icon} />
+              <FaPause className={styles.music_icon} />
             ) : (
-              <FaPlay className={styles.heart_icon} />
+              <FaPlay className={styles.music_icon} />
             )}
           </button>
         </div>
-        <div className={styles.card_footer}>
-          <a
-            href={`${props.item.local_spotify_url}`}
-            target="_blank"
-            className={styles.title}
-          >
-            <FaSpotify className={styles.heart_icon} />
-          </a>
-          <button
-            onClick={() => addToFavorite(props.item)}
-            className={styles.btn}
-            title={
-              gameIsFavorite(props.item.id)
-                ? "Remove from favorites"
-                : "Add to favorites"
-            }
-          >
-            <FaHeart
-              className={styles.heart_icon}
-              style={{
-                color: gameIsFavorite(props.item.id) ? "red" : "#aaaaaa",
-              }}
-            />
-          </button>
-        </div>
+      </div>
+      <div className={styles.card_footer}>
+        <a
+          href={`${props.item.local_spotify_url}`}
+          target="_blank"
+          className={styles.title}
+        >
+          <FaSpotify className={styles.heart_icon} />
+        </a>
+        <button
+          onClick={() => addToFavorite(props.item)}
+          className={styles.btn}
+          title={
+            gameIsFavorite(props.item.id)
+              ? "Remove from favorites"
+              : "Add to favorites"
+          }
+        >
+          <FaHeart
+            className={styles.heart_icon}
+            style={{
+              color: gameIsFavorite(props.item.id) ? "red" : "#aaaaaa",
+            }}
+          />
+        </button>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import "swiper/swiper-bundle.min.css";
 import "swiper/swiper.min.css";
 import SwiperCore, { Autoplay, Navigation } from "swiper";
 import PopularityItem from "./PopularityItem";
-import styles from "../../../pages/Home.module.css";
+import styles from "./Popularity.module.css";
 import Spinner from "../../ui/Spinner";
 import { currentYear } from "../../../lib/Lib";
 SwiperCore.use([Autoplay, Navigation]);
@@ -14,21 +14,21 @@ export default function Popularity({
   popularityAnime,
 }) {
   return (
-    <section className={styles.games_content}>
+    <section className={styles.content}>
       <div className={styles.card_title}>
         <h1 className={styles.title}>
-          Top 10 Popularity Anime {currentYear()} !
+          Top 10 Popularity Anime {currentYear()}!
         </h1>
       </div>
       {popularityPending && <Spinner />}
       {popularityErr && <p>{popularityErr}</p>}
       <Swiper
         navigation={true}
-        effect={"coverflow"}
         autoplay={{
           delay: 3000,
         }}
-        // grabCursor={true}
+        grabCursor={true}
+        loop={true}
         slidesPerView={1}
         spaceBetween={10}
         breakpoints={{
@@ -45,16 +45,6 @@ export default function Popularity({
             spaceBetween: 20,
           },
         }}
-        // centeredSlides={true}
-        // slidesPerView={"auto"}
-        // coverflowEffect={{
-        //   rotate: 50,
-        //   stretch: 0,
-        //   depth: 100,
-        //   modifier: 1,
-        //   slideShadows: false,
-        // }}
-        // pagination={true}
         className="mySwiper"
       >
         {popularityAnime &&

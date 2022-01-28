@@ -1,8 +1,5 @@
 import styles from "./TrendingItem.module.css";
-// import { useState, useEffect } from "react";
 import { AiFillStar } from "react-icons/ai";
-import { useFetch } from "../../../hooks/useFetch";
-import Spinner from "../../ui/Spinner";
 import { Year } from "../../../lib/Lib";
 import Genres from "../../genres/Genres";
 

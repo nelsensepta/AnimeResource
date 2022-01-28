@@ -1,13 +1,30 @@
-/* .games_content {
+.content {
   overflow: hidden;
-  margin: 5rem 0;
+  /* text-align: center; */
+  margin-top: 7rem;
 }
 
 .card_title {
-  margin: 11rem 0 3rem;
+  margin-bottom: 2rem;
 }
 
 .title {
   text-align: start;
   font-size: 3rem;
-} */
+}
+
+.btnWrapper {
+  margin-top: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.moreBtn {
+  align-items: center;
+  text-align: center;
+  background-color: rgb(39, 50, 71);
+  padding: 0.5rem 1rem;
+}

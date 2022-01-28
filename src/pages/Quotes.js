@@ -23,9 +23,6 @@ const Quotes = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   let param = searchParams.get(`${search}`);
   const debouncedSearchTerm = useDebounce(param, 500);
-  // console.log(searchParams);
-  // console.log(param);
-  // console.log(filteredQuotes);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -61,14 +58,6 @@ const Quotes = () => {
     };
   }, [debouncedSearchTerm]);
 
-  // console.log(!allAnime.length);
-  // console.log(allAnime);
-  console.log(err);
-  // let url = `${process.env.REACT_APP_API_URL_QUETOS}/random`;
-  // setAllAnime(
-  //   useFetch(`${process.env.REACT_APP_API_URL_QUETOS}/available/anime`)
-  // );
-
   // console.log(allAnime);
   // const { availableAnime, isPending, error } = useFetch(
   //   `${process.env.REACT_APP_API_URL_QUETOS}/available/anime`
@@ -98,11 +87,12 @@ const Quotes = () => {
   //   url = `${process.env.REACT_APP_API_URL_ANIME}/v1/song?sort-by=popularity&category=${selectedCategory}`;
   // }
 
-  // const {
-  //   res: single,
-  //   isPending: singlePending,
-  //   error: singleErr,
-  // } = useFetch(`${process.env.REACT_APP_API_URL_QUETOS}/random`);
+  const {
+    res: single,
+    isPending: singlePending,
+    error: singleErr,
+  } = useFetch(`${process.env.REACT_APP_API_URL_QUETOS}/random`);
+  console.log(single);
   // const {
   //   res: availableAnime,
   //   isPending: availableAnimePending,
@@ -142,13 +132,6 @@ const Quotes = () => {
   // console.log(Array.isArray(filteredQuotes));
   return (
     <section className={styles.content}>
-      {/* <h1 className="title">
-        Top 10 Free{" "}
-        <span className={styles.lead}>
-          {selectedCategory ? selectedCategory : "To Play"}
-        </span>{" "}
-        Games for PC and Browser in {currentMonth} {currentYear}
-      </h1> */}
       <div className={styles.card_title}>
         <h1 className={styles.title}>Single Anime Quotes</h1>
       </div>
@@ -176,21 +159,24 @@ const Quotes = () => {
           </select>
         </div>
       </div>
-      {/* {allAnime ? (
-        <QuoteList items={allAnime} />
+      {/* {filteredQuotes ? (
+        <QuoteList items={filteredQuotes} />
       ) : (
-        // <QuoteSingle item={single} />
-        <p>ok</p>
+        <QuoteSingle item={single} />
       )} */}
       {err && <p>{err}</p>}
+      {single && <QuoteSingle item={single} />}
+      {singlePending && <Spinner />}
+      {singleErr && <p>{singleErr}</p>}
+
       {/* {loading &&
         Array(9)
           .fill()
           .map((item, index) => <Card key={index} />)} */}
 
-      {!err && filteredQuotes && <QuoteList items={filteredQuotes} />}
+      {/* {!err && filteredQuotes && <QuoteList items={filteredQuotes} />} */}
       {/* <p>{allAnime.error}</p> */}
-      {loading && <Spinner />}
+      {/* {loading && <Spinner />} */}
       {/* {err && <p>{err}</p>} */}
       {/* {allAnime.length !== 0 && <QuoteList items={allAnime} />} */}
     </section>
