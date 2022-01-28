@@ -21,19 +21,12 @@ $ npm start
 
 ## User Stories
 
-1. As a user, user bisa melihat semua list game gratis yg tersedia di halaman "Home".
-2. As a user, user bisa mencari game dengan mengetikan keyword gamenya di form pencarian pada halaman "Home".
-3. As a user, user bisa menambahkan atau menghapus game favorit dengan mengklik icon hati.
-4. As a user, user bisa melihat Top 10 game populer di halaman "Popular".
-5. As a user, user bisa memilih opsi kategori game untuk menampilkan Top 10 game berdasarkan kategori yang di pilih di halaman "Popular".
-6. As a user, user bisa melihat list game favorit / game yg disukainya di halaman "Favorites".
-
 ## Built With
 
 - React JS
 - JavaScript
 - CSS
 
-_Sumber API Anime dari [Kitsu] (https://kitsu.docs.apiary.io/)_
-_Sumber API Anime Songs dari [Kitsu] (https://aniapi.com/docs/resources/song/)_
-_Sumber API Anime Quotes dari [Kitsu] (https://animechan.vercel.app//)_
+\_Sumber API Anime dari [Kitsu] (https://kitsu.docs.apiary.io/)
+\_Sumber API Anime Songs dari [AniApi] (https://aniapi.com/docs/resources/song/)
+\_Sumber API Anime Quotes dari [AnimeChan] (https://animechan.vercel.app//)

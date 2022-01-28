@@ -20,14 +20,27 @@ const Details = () => {
   const [details, setDetails] = useState();
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState();
+  // console.log(details.data[0].id);
 
   // Character
-  const [char, setChar] = useState([]);
+  const [char, setChar] = useState({});
+  // const [people, setPeople] = useState([]);
   const [page, setPage] = useState(0);
   const [noData, setNoData] = useState(false);
   const [loadingChar, setLoadingChar] = useState(false);
-  const [visibleChar, setVisibleChar] = useState(false);
-  const [charErr, setCharErr] = useState();
+  // details && console.log(details.data[0].id);
+
+  // const {
+  //   res: anime,
+  //   isPending: animePending,
+  //   error: animeErr,
+  // } = useFetch(
+  //   `${process.env.REACT_APP_API_URL_ANIME}/anime?filter[slug]=${slug}&include=categories,characters`
+  // );
+
+  // console.log(anime);
+  // const ok =
+  //   "https://kitsu.io/api/edge/castings?filter[media_type]=Anime&filter[media_id]=7442&filter[is_character]=true&filter[language]=Japanese&include=character,person&sort=-featured";
 
   useEffect(() => {
     loadCharList(page);
@@ -54,36 +67,137 @@ const Details = () => {
     };
   }, [details]);
 
-  const fillPeopleOrChar = (data) => {
-    // console.log(data);
-
-    return data
-      ? data.filter(
-          (v, i, a) =>
-            a.findIndex(
-              (t) => t.attributes.name === v.attributes.name || t.id === v.id
-            ) === i
-        )
-      : undefined;
-  };
   console.log(char);
-  console.log(charErr);
+
+  const fillPeopleOrChar = (data, value) => {
+    // return relasi.type === "people";
+    return data.filter((relasi) => relasi.type === value);
+  };
 
   const loadCharList = (page) => {
     if (details) {
-      if (visibleChar) setLoadingChar(true);
+      setLoadingChar(true);
       setTimeout(() => {
         AnimeService.getCharacter(details.data[0].id, page)
           .then((res) => {
             const newPage = page + 20;
-            if (res.length === 0) setNoData(true);
+            // console.log(res);
+            const filChar = fillPeopleOrChar(res.included, "characters");
+            const filPer = fillPeopleOrChar(res.included, "people");
+            // console.log(filPer);
+            // var newChar = res.data.map((e, i) => {
+            //   let objNew = {
+            //     ...e,
+            //     relationships: {
+            //       character: { data: {} },
+            //       person: { data: {} },
+            //     },
+            //   };
+            //   // objNew.relationships.person.data = 1;
+            //   console.log(objNew);
+            //   if (res.included[i].type === "characters") {
+            //     for (var j = 0; j < filChar.length; j++) {
+            //       // return filChar[i];
+            //       // console.log(j, i);
+            //       if (filChar[j].id === e.relationships.character.data.id) {
+            //         return (objNew.relationships.character.data = filChar[j]);
+            //       }
+            //     }
+            //   }
 
-            const newChar = char.concat(res);
-            setChar(newChar);
+            //   if (res.included[i].type === "people") {
+            //     for (var k = 0; k < filPer.length; k++) {
+            //       if (filPer[k].id === e.relationships.person.data.id) {
+            //         return (objNew.relationships.person.data = filPer[k]);
+            //       }
+            //     }
+            //   }
+
+            //   // break;
+            //   // console.log(objNew);
+            //   // console.log(objNew);
+
+            //   // res.included.forEach((f) => {
+            //   //   if (
+            //   //     e.relationships.character.data.id === f.id &&
+            //   //     e.relationships.character.data.type === f.type
+            //   //   ) {
+            //   //     return console.log({
+            //   //       ...e,
+            //   //       relationships: {
+            //   //         // person: { data: f },
+            //   //         character: { data: f },
+            //   //       },
+            //   //     });
+            //   //   } else {
+            //   //     return console.log({
+            //   //       ...e,
+            //   //       relationships: {
+            //   //         person: { data: f },
+            //   //         character: {
+            //   //           data: { ...e.relationships.character.data },
+            //   //         },
+            //   //       },
+            //   //     });
+            //   //   }
+            //   //   // return e;
+            //   // });
+            //   // const newObj = {};
+            //   // for (let f of res.included) {
+            //   //   console.log(f);
+            //   //   if (e.relationships.character.data.id === f.id) {
+            //   //     return {
+            //   //       ...e,
+            //   //     };
+            //   //   } else {
+            //   //     return {
+            //   //       ...e,
+            //   //       relationships: {
+            //   //         person: { data: f },
+            //   //         character: { data: f },
+            //   //       },
+            //   //     };
+            //   //   }
+            //   // }
+            //   // console.log(e);
+            //   return objNew;
+            // });
+            // console.log(newChar);
+            // setChar(res.data);
+
+            // setPeople(newPeople);
+            var newChar = res.data.map((v, i) => {
+              let objNew = {
+                ...v,
+                relationships: {
+                  character: { data: {} },
+                  person: { data: {} },
+                },
+              };
+              console.log(i);
+              res.data.forEach((a) => {
+                console.log(a);
+                for (var j = 0; j < filChar.length; j++) {
+                  if (filChar[j].id === a.relationships.character.data.id) {
+                    return (objNew.relationships.character.data = filChar[j]);
+                  }
+                }
+              });
+              res.data.forEach((b) => {
+                for (var k = 0; k < filPer.length; k++) {
+                  if (filPer[k].id === b.relationships.person.data.id) {
+                    return (objNew.relationships.person.data = filPer[k]);
+                  }
+                }
+              });
+              return objNew;
+            });
+            console.log(newChar);
             setPage(newPage);
+            if (res.length === 0) setNoData(true);
           })
-          .catch(() => {
-            setCharErr("Maaf Karakter Tidak Ada");
+          .catch((err) => {
+            console.log(err);
           })
           .finally(() => {
             setLoadingChar(false);
@@ -92,11 +206,15 @@ const Details = () => {
     }
   };
 
+  // console.log(char);
+  // console.log(people);
+
   const moreChar = () => {
     if (!noData) {
       loadCharList(page);
     }
   };
+
   // const { gameIsFavorite, addToFavorite } = useContext(FavoritesContext);
 
   // console.log(anime.data[0].attributes.youtubeVideoId);
@@ -137,7 +255,7 @@ const Details = () => {
               {/* <Genres
                 genres={details.data[0].relationships.categories.links.related}
               /> */}
-              <div className={styles.genres}>
+              {/* <div className={styles.genres}>
                 {details.included.map((genre) => (
                   <a
                     key={genre.id}
@@ -147,25 +265,47 @@ const Details = () => {
                     {genre.attributes.title}
                   </a>
                 ))}
-              </div>
+                
+              </div> */}
+              {/* <span>
+                {" "}
+                {details.data[0].relationships.categories.links.related}{" "}
+              </span> */}
+              {/* <span>Start Date{details.data[0].attributes.startDate}</span> */}
+              {/* <div className={styles.genres}>
+                {details.included
+                  .filter((relasi) => relasi.type === "categories")
+                  .map((genre) => (
+                    <a
+                      key={genre.id}
+                      href={`/details/genre/${genre.attributes.slug}`}
+                      className={styles.genre}
+                    >
+                      {genre.attributes.title}
+                    </a>
+                  ))}
+              </div> */}
+
+              {/* {pendingGenres && <Spinner />}
+              {genredetailsErr && <p>{genredetailsErr}</p>} */}
+              {/* <p>{details.data[0].relationships.categories.links.related}</p> */}
+
+              {/* <iframe
+                width="420"
+                height="315"
+                src={`https://www.youtube.com/embed/${details.data[0].attributes.youtubeVideoId}`}
+              ></iframe> */}
               <article>{details.data[0].attributes.description}</article>
-              <div className={styles.characters}>
-                {visibleChar && <Character char={fillPeopleOrChar(char)} />}
-                {loadingChar && <Spinner />}
-                {charErr ? (
-                  <p>{charErr}</p>
-                ) : (
-                  <button
-                    className={styles.ok}
-                    onClick={
-                      !visibleChar
-                        ? () => setVisibleChar(true)
-                        : () => moreChar()
-                    }
-                  >
-                    Character
-                  </button>
-                )}
+              <div className={styles.genres}>
+                <button
+                  // href={`/details/genre/${kederCuk.attributes.role}`}
+                  className={styles.ok}
+                  onClick={() => moreChar()}
+                >
+                  Character
+                </button>
+                <p>{details.data[0].id}</p>
+                {/* <Character char={char} people={people} /> */}
               </div>
             </div>
           </div>
