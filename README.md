@@ -11,7 +11,7 @@ Untuk mengkloning dan menjalankan aplikasi ini, pastikan bahwa [Git](https://git
 
 ```bash
 # Clone this repository
-# $ git clone https://github.com/indraAK/gametis.git
+# $ https://github.com/nelsensepta/AnimeResource.git
 
 # Install dependencies
 $ npm install
