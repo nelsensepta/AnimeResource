@@ -2,7 +2,7 @@
 
 AnimeResource adalah sebuah aplikasi web sederhana untuk mencari Anime yg keren dan menarik dengan User Interface (UI) nya simple, elegan, modern dan responsive.
 
-![screenshot](https://i.ibb.co/ZdM3H0h/gametis.png)
+<!-- ![screenshot](https://i.ibb.co/ZdM3H0h/gametis.png) -->
 
 ## How To Use
 
