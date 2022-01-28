@@ -9,7 +9,7 @@ const Footer = () => {
     <footer className={styles.footer}>
       <div className="container">
         <p className="text-muted">
-          © {currentYear} Gametis, all rights reserved.
+          © {currentYear} AnimeResource, all rights reserved.
         </p>
         <p className={styles.created}>
           Created with
